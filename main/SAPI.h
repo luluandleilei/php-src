@@ -217,19 +217,19 @@ SAPI_API void sapi_terminate_process(void);
 END_EXTERN_C()
 
 struct _sapi_module_struct {
-	char *name;
-	char *pretty_name;
+	char *name;				//名字
+	char *pretty_name;		//更好理解的名字
 
-	int (*startup)(struct _sapi_module_struct *sapi_module);
-	int (*shutdown)(struct _sapi_module_struct *sapi_module);
+	int (*startup)(struct _sapi_module_struct *sapi_module);	//启动方法
+	int (*shutdown)(struct _sapi_module_struct *sapi_module);   //关闭方法
 
-	int (*activate)(void);
-	int (*deactivate)(void);
+	int (*activate)(void);		//激活
+	int (*deactivate)(void);	//停用
 
-	size_t (*ub_write)(const char *str, size_t str_length);
-	void (*flush)(void *server_context);
-	zend_stat_t *(*get_stat)(void);
-	char *(*getenv)(char *name, size_t name_len);
+	size_t (*ub_write)(const char *str, size_t str_length);  //不缓存的写操作(unbuffered write)
+	void (*flush)(void *server_context);	//flush
+	zend_stat_t *(*get_stat)(void);			//get uid
+	char *(*getenv)(char *name, size_t name_len);	//get env
 
 	void (*sapi_error)(int type, const char *error_msg, ...) ZEND_ATTRIBUTE_FORMAT(printf, 2, 3);
 
@@ -245,7 +245,7 @@ struct _sapi_module_struct {
 	double (*get_request_time)(void);
 	void (*terminate_process)(void);
 
-	char *php_ini_path_override;
+	char *php_ini_path_override;	//覆盖的ini路径
 
 	void (*default_post_reader)(void);
 	void (*treat_data)(int arg, char *str, zval *destArray);

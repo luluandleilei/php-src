@@ -141,16 +141,16 @@ void zend_const_expr_to_zval(zval *result, zend_ast *ast);
 typedef int (*user_opcode_handler_t) (zend_execute_data *execute_data);
 
 struct _zend_op {
-	const void *handler;
+	const void *handler;		//执行该opcode时调用的处理函数
 	znode_op op1;
 	znode_op op2;
-	znode_op result;
+	znode_op result;			//保存该指令执行完成后的结果
 	uint32_t extended_value;
 	uint32_t lineno;
 	zend_uchar opcode;
 	zend_uchar op1_type;
 	zend_uchar op2_type;
-	zend_uchar result_type;
+	zend_uchar result_type;		//opcode代码
 };
 
 
