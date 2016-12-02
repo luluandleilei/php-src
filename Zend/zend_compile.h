@@ -358,7 +358,7 @@ struct _zend_op_array {
 	zend_uchar type;
 	zend_uchar arg_flags[3]; /* bitset of arg_info.pass_by_reference */
 	uint32_t fn_flags;
-	zend_string *function_name;
+	zend_string *function_name;	//如果是用户定义的函数，这里将保存函数的名字
 	zend_class_entry *scope;
 	zend_function *prototype;
 	uint32_t num_args;
@@ -369,7 +369,7 @@ struct _zend_op_array {
 	uint32_t *refcount;
 
 	uint32_t last;
-	zend_op *opcodes;
+	zend_op *opcodes;	//opcode数组
 
 	int last_var;
 	uint32_t T;
