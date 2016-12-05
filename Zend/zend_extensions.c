@@ -21,7 +21,7 @@
 
 #include "zend_extensions.h"
 
-ZEND_API zend_llist zend_extensions;
+ZEND_API zend_llist zend_extensions;		//以链表形式记录所有的zend扩展
 ZEND_API uint32_t zend_extension_flags = 0;
 static int last_resource_number;
 

@@ -147,10 +147,10 @@ struct _zend_op {
 	znode_op result;			//保存该指令执行完成后的结果
 	uint32_t extended_value;
 	uint32_t lineno;
-	zend_uchar opcode;
-	zend_uchar op1_type;
-	zend_uchar op2_type;
-	zend_uchar result_type;		//opcode代码
+	zend_uchar opcode;			//操作类型，操作类型和两个操作数的类型共同决定该操作的处理函数
+	zend_uchar op1_type;		//第一个操作数的类型:_CONST_CODE | _TMP_CODE | _VAR_CODE  | _UNUSED_CODE | _CV_CODE  
+	zend_uchar op2_type;		//第二个操作数的类型:_CONST_CODE | _TMP_CODE | _VAR_CODE  | _UNUSED_CODE | _CV_CODE  
+	zend_uchar result_type;		
 };
 
 
