@@ -2524,10 +2524,10 @@ static void zend_update_type_info(const zend_op_array *op_array,
 						tmp |= (t1 & MAY_BE_RC1) | MAY_BE_RCN;
 					} else if ((opline->extended_value == IS_ARRAY ||
 					            opline->extended_value == IS_OBJECT) &&
-					           (tmp & (MAY_BE_ARRAY|MAY_BE_OBJECT))) {
+					           (t1 & (MAY_BE_ARRAY|MAY_BE_OBJECT))) {
 							tmp |= MAY_BE_RC1 | MAY_BE_RCN;
 					} else if (opline->extended_value == IS_STRING &&
-					           (t1 & MAY_BE_STRING)) {
+					           (t1 & (MAY_BE_STRING|MAY_BE_OBJECT))) {
 						tmp |= MAY_BE_RC1 | MAY_BE_RCN;
 					} else {
 						tmp |= MAY_BE_RC1;
@@ -3474,12 +3474,16 @@ static void zend_update_type_info(const zend_op_array *op_array,
 			UPDATE_SSA_TYPE(MAY_BE_FALSE|MAY_BE_TRUE, ssa_ops[i].result_def);
 			break;
 		case ZEND_VERIFY_RETURN_TYPE:
-		{
-			zend_arg_info *ret_info = op_array->arg_info - 1;
+			if (t1 & MAY_BE_REF) {
+				tmp = t1;
+				ce = NULL;
+			} else {
+				zend_arg_info *ret_info = op_array->arg_info - 1;
 
-			tmp = zend_fetch_arg_info(script, ret_info, &ce);
-			if (tmp & (MAY_BE_STRING|MAY_BE_ARRAY|MAY_BE_OBJECT|MAY_BE_RESOURCE)) {
-				tmp |= MAY_BE_RC1 | MAY_BE_RCN;
+				tmp = zend_fetch_arg_info(script, ret_info, &ce);
+				if (tmp & (MAY_BE_STRING|MAY_BE_ARRAY|MAY_BE_OBJECT|MAY_BE_RESOURCE)) {
+					tmp |= MAY_BE_RC1 | MAY_BE_RCN;
+				}
 			}
 			if (opline->op1_type & (IS_TMP_VAR|IS_VAR|IS_CV)) {
 				UPDATE_SSA_TYPE(tmp, ssa_ops[i].op1_def);
@@ -3497,7 +3501,6 @@ static void zend_update_type_info(const zend_op_array *op_array,
 				}
 			}
 			break;
-		}
 		case ZEND_CATCH:
 		case ZEND_INCLUDE_OR_EVAL:
 			/* Forbidden opcodes */

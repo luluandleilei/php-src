@@ -6,6 +6,7 @@ PHP                                                                        NEWS
   . Fix integer overflows (Joshua Rogers)
 
 - Core:
+  . Removed IS_TYPE_IMMUTABLE (it's the same as COPYABLE & !REFCOUNTED). (Dmitry)
   . Removed the sql.safe_mode directive. (Kalle)
   . Removed support for Netware. (Kalle)
   . Fixed bug #54535 (WSA cleanup executes before MSHUTDOWN). (Kalle)
@@ -18,6 +19,8 @@ PHP                                                                        NEWS
     operation). (Dmitry)
   . Implemented FR #72768 (Add ENABLE_VIRTUAL_TERMINAL_PROCESSING flag for
     php.exe). (Michele Locati)
+  . Implemented "Convert numeric keys in object/array casts" RFC, fixes
+    bugs #53838, #61655, #66173, #70925, #72254, etc. (Andrea)
 
 - Date:
   . Fixed bug #69587 (DateInterval properties and isset). (jhdxr)
@@ -50,10 +53,16 @@ PHP                                                                        NEWS
   . Added array input support to mb_convert_encoding(). (Yasuo)
   . Added array input support to mb_check_encoding(). (Yasuo)
 
+- PDO:
+  . Add PDOStatement::activeQueryString(). (Adam Baratz)
+
 - PDO_DBlib:
   . Fixed bug #73234 (Emulated statements let value dictate parameter type).
     (Adam Baratz)
-  . Fixed bug #73396 (bigint columns are returned as strings).
+  . Fixed bug #73396 (bigint columns are returned as strings). (Adam Baratz)
+
+- Session:
+  . Fixed bug #73461 (Prohibit session save handler recursion) . (yohgaki)
 
 - SOAP:
   . Fixed bug #69137 (Peer verification fails when using a proxy with SoapClient)
