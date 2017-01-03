@@ -200,6 +200,11 @@ int zend_optimizer_update_op1_const(zend_op_array *op_array,
 		case ZEND_SEND_VAR_NO_REF_EX:
 			zval_ptr_dtor(val);
 			return 0;
+		case ZEND_VERIFY_RETURN_TYPE:
+			/* This would require a non-local change.
+			 * zend_optimizer_replace_by_const() supports this. */
+			zval_ptr_dtor(val);
+			return 0;
 		case ZEND_CONCAT:
 		case ZEND_FAST_CONCAT:
 		case ZEND_FETCH_R:
@@ -501,7 +506,6 @@ int zend_optimizer_replace_by_const(zend_op_array *op_array,
 				}
 				case ZEND_VERIFY_RETURN_TYPE: {
 					zend_arg_info *ret_info = op_array->arg_info - 1;
-					ZEND_ASSERT((opline + 1)->opcode == ZEND_RETURN || (opline + 1)->opcode == ZEND_RETURN_BY_REF);
 					if (ret_info->class_name
 						|| ret_info->type_hint == IS_CALLABLE
 						|| !ZEND_SAME_FAKE_TYPE(ret_info->type_hint, Z_TYPE_P(val))
@@ -510,7 +514,13 @@ int zend_optimizer_replace_by_const(zend_op_array *op_array,
 						return 0;
 					}
 					MAKE_NOP(opline);
-					opline++;
+
+					/* zend_handle_loops_and_finally may inserts other oplines */
+					do {
+						++opline;
+					} while (opline->opcode != ZEND_RETURN && opline->opcode != ZEND_RETURN_BY_REF);
+					ZEND_ASSERT(ZEND_OP1(opline).var == var);
+
 					break;
 				  }
 				default:

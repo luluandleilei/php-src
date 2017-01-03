@@ -44,7 +44,8 @@ var PHP_TEST_INI_PATH = "";
 var PHP_TEST_INI = "";
 var PHP_TEST_INI_EXT_EXCLUDE = "";
 
-var WINVER = "0x0600"; /* Vista */
+/* Care also about NTDDI_VERSION and _WIN32_WINNT in config.w32.h.in */
+var WINVER = "0x0601"; /* 7/2008r2 */
 
 // There's a minimum requirement for re2c..
 var MINRE2C = "0.13.4";
@@ -3032,8 +3033,9 @@ function toolset_setup_common_cflags()
 	DEFINE('CFLAGS_PHP_OBJ', '$(CFLAGS_PHP) $(STATIC_EXT_CFLAGS)');
 
 	// General CFLAGS for building objects
-	DEFINE("CFLAGS", "/nologo $(BASE_INCLUDES) /D _WINDOWS \
-		/D ZEND_WIN32=1 /D PHP_WIN32=1 /D WIN32 /D _MBCS /W3");
+	DEFINE("CFLAGS", "/nologo $(BASE_INCLUDES) /D _WINDOWS /D WINDOWS=1 \
+		/D ZEND_WIN32=1 /D PHP_WIN32=1 /D WIN32 /D _MBCS /W3 \
+		/D _USE_MATH_DEFINES");
 
 	if (VS_TOOLSET) {
 		ADD_FLAG("CFLAGS", " /FD ");

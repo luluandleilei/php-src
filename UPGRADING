@@ -35,8 +35,10 @@ PHP 7.2 UPGRADE NOTES
     /^(0|(-?[1-9][0-9]*))$/ where PHP_INT_MIN <= n <= PHP_INT_MAX) to integer
     keys. This fixes the behaviour of previous versions, where numeric string
     property names would become inaccessible string keys.
+  . Minimum supported Windows versions are Windows 7/Server 2008 R2.
 
 - Session:
+  . Removed register_globals related code and "!" can be used as $_SESSION key name.
   . Session is made to manage session status corretly and prevents invalid operations.
     Only inappropriate codes are affected by this change. If you have problems with this,
     it means you have problem in your code.
@@ -110,6 +112,7 @@ PHP 7.2 UPGRADE NOTES
     ];
   . count() now raises a warning when an invalid parameter is passed.
     Only arrays and objects implementing the Countable interface should be passed.
+  . pack() and unpack() now support float and double in both little and big endian.
 
 - XML:
   . utf8_encode() and utf8_decode() have been moved to the Standard extension
@@ -143,6 +146,12 @@ PHP 7.2 UPGRADE NOTES
 ========================================
 8. Removed Extensions and SAPIs
 ========================================
+
+- Mcrypt:
+  . The deprecated mcrypt extension has been moved to PECL.
+  . libmcrypt has not been maintained since 2007 and the continued use of this
+    extension is strongly discouraged.
+  . Users are advised to use alternatives such as OpenSSL or libsodium.
 
 ========================================
 9. Other Changes to Extensions

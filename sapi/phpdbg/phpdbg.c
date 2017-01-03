@@ -72,7 +72,7 @@ PHP_INI_END()
 
 static zend_bool phpdbg_booted = 0;
 static zend_bool phpdbg_fully_started = 0;
-zend_bool use_mm_wrappers = 0;
+zend_bool use_mm_wrappers = 1;
 
 static void php_phpdbg_destroy_bp_file(zval *brake) /* {{{ */
 {
@@ -128,7 +128,6 @@ static void php_phpdbg_destroy_file_source(zval *data) /* {{{ */
 	if (source->buf) {
 		efree(source->buf);
 	}
-	efree(source->filename);
 	efree(source);
 } /* }}} */
 
@@ -1331,7 +1330,7 @@ void phpdbg_free_wrapper(void *p ZEND_FILE_LINE_DC ZEND_FILE_LINE_ORIG_DC) /* {{
 		 */
 	} else {
 		phpdbg_watch_efree(p);
-		return _zend_mm_free(heap, p ZEND_FILE_LINE_RELAY_CC ZEND_FILE_LINE_ORIG_RELAY_CC);
+		_zend_mm_free(heap, p ZEND_FILE_LINE_RELAY_CC ZEND_FILE_LINE_ORIG_RELAY_CC);
 	}
 } /* }}} */
 
@@ -1605,7 +1604,7 @@ phpdbg_main:
 	quit_immediately = phpdbg_startup_run > 1;
 
 	/* set exec if present on command line */
-	if (!read_from_stdin && argc > php_optind && (strcmp(argv[php_optind-1], "--") != SUCCESS)) {
+	if (!read_from_stdin && argc > php_optind) {
 		if (!exec && strlen(argv[php_optind])) {
 			exec = strdup(argv[php_optind]);
 		}
