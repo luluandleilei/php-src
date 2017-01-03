@@ -913,7 +913,7 @@ static int sapi_cgi_deactivate(void)
 				php_handle_aborted_connection();
 			}
 		} else {
-			sapi_cgi_flush(SG(server_context));
+			sapi_cgi_flush(SG(server_context)); //刷新缓冲区，用以保证用户在zend关闭前得到所有的输出数据
 		}
 	}
 	return SUCCESS;

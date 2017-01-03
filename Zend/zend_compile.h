@@ -201,9 +201,9 @@ typedef struct _zend_oparray_context {
 } zend_oparray_context;
 
 /* method flags (types) */
-#define ZEND_ACC_STATIC			0x01
-#define ZEND_ACC_ABSTRACT		0x02
-#define ZEND_ACC_FINAL			0x04
+#define ZEND_ACC_STATIC			0x01    //静态方法
+#define ZEND_ACC_ABSTRACT		0x02    //抽象方法，该方法应该在被直接调用之前被子类覆写.
+#define ZEND_ACC_FINAL			0x04    //方法不能被子类覆写
 #define ZEND_ACC_IMPLEMENTED_ABSTRACT		0x08
 
 /* class flags (types) */
