@@ -2,7 +2,7 @@
    +----------------------------------------------------------------------+
    | PHP Version 7                                                        |
    +----------------------------------------------------------------------+
-   | Copyright (c) 1997-2016 The PHP Group                                |
+   | Copyright (c) 1997-2017 The PHP Group                                |
    +----------------------------------------------------------------------+
    | This source file is subject to version 3.01 of the PHP license,      |
    | that is bundled with this package in the file LICENSE, and is        |
@@ -5629,6 +5629,15 @@ PHP_FUNCTION(getservbyname)
 
 	serv = getservbyname(name, proto);
 
+#if defined(_AIX)
+	/*
+        On AIX, imap is only known as imap2 in /etc/services, while on Linux imap is an alias for imap2.
+        If a request for imap gives no result, we try again with imap2.
+        */
+	if (serv == NULL && strcmp(name,  "imap") == 0) {
+		serv = getservbyname("imap2", proto);
+	}
+#endif
 	if (serv == NULL) {
 		RETURN_FALSE;
 	}

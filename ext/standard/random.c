@@ -2,7 +2,7 @@
    +----------------------------------------------------------------------+
    | PHP Version 7                                                        |
    +----------------------------------------------------------------------+
-   | Copyright (c) 1997-2016 The PHP Group                                |
+   | Copyright (c) 1997-2017 The PHP Group                                |
    +----------------------------------------------------------------------+
    | This source file is subject to version 3.01 of the PHP license,      |
    | that is bundled with this package in the file LICENSE, and is        |
@@ -93,7 +93,7 @@ PHPAPI int php_random_bytes(void *bytes, size_t size, zend_bool should_throw)
 	}
 #elif HAVE_DECL_ARC4RANDOM_BUF && ((defined(__OpenBSD__) && OpenBSD >= 201405) || (defined(__NetBSD__) && __NetBSD_Version__ >= 700000001))
 	arc4random_buf(bytes, size);
-#elif HAVE_DECL_GETRANDOM
+#elif defined(__linux__) && defined(SYS_getrandom)
 	/* Linux getrandom(2) syscall */
 	size_t read_bytes = 0;
 	size_t amount_to_read = 0;

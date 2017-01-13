@@ -2,7 +2,7 @@
    +----------------------------------------------------------------------+
    | PHP Version 7                                                        |
    +----------------------------------------------------------------------+
-   | Copyright (c) 1997-2016 The PHP Group                                |
+   | Copyright (c) 1997-2017 The PHP Group                                |
    +----------------------------------------------------------------------+
    | This source file is subject to version 3.01 of the PHP license,      |
    | that is bundled with this package in the file LICENSE, and is        |
@@ -1171,8 +1171,7 @@ PHP_FUNCTION(deflate_add)
 		if (ctx->avail_out == 0) {
 			/* more output buffer space needed; realloc and try again */
 			/* adding 64 more bytes solved every issue I have seen    */
-			/* the + 1 is for the string terminator added below */
-			out = zend_string_realloc(out, ZSTR_LEN(out) + 64 + 1, 0);
+			out = zend_string_realloc(out, ZSTR_LEN(out) + 64, 0);
 			ctx->avail_out = 64;
 			ctx->next_out = (Bytef *) ZSTR_VAL(out) + buffer_used;
 		}

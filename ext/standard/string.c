@@ -2,7 +2,7 @@
    +----------------------------------------------------------------------+
    | PHP Version 7                                                        |
    +----------------------------------------------------------------------+
-   | Copyright (c) 1997-2016 The PHP Group                                |
+   | Copyright (c) 1997-2017 The PHP Group                                |
    +----------------------------------------------------------------------+
    | This source file is subject to version 3.01 of the PHP license,      |
    | that is bundled with this package in the file LICENSE, and is        |
@@ -5597,7 +5597,15 @@ PHP_FUNCTION(money_format)
 		zend_string_free(str);
 		RETURN_FALSE;
 	}
+#ifdef _AIX
+	/*
+	On AIX strfmon seems to include the terminating \0 in the length returned by strfmon,
+	despite the documentation indicating it is not included.
+	*/
+	ZSTR_LEN(str) = strlen(ZSTR_VAL(str));
+#else
 	ZSTR_LEN(str) = (size_t)res_len;
+#endif
 	ZSTR_VAL(str)[ZSTR_LEN(str)] = '\0';
 
 	RETURN_NEW_STR(zend_string_truncate(str, ZSTR_LEN(str), 0));
