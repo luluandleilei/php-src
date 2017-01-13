@@ -64,14 +64,14 @@ typedef struct _zend_stream {
 
 typedef struct _zend_file_handle {
 	union {
-		int           fd;
-		FILE          *fp;
+		int           fd;	//VCWD_OPEN
+		FILE          *fp;	//VCWD_FOPEN
 		zend_stream   stream;
 	} handle;
-	const char        *filename;
+	const char        *filename;	//文件名
 	zend_string       *opened_path;
-	zend_stream_type  type;
-	zend_bool free_filename;
+	zend_stream_type  type;	//指定handle的类型
+	zend_bool free_filename;	//指明是否需要释放filename的内存空间
 } zend_file_handle;
 
 BEGIN_EXTERN_C()
