@@ -62,7 +62,7 @@ static const unsigned char tolower_map[256] = {
 0xf0,0xf1,0xf2,0xf3,0xf4,0xf5,0xf6,0xf7,0xf8,0xf9,0xfa,0xfb,0xfc,0xfd,0xfe,0xff
 };
 
-#define zend_tolower_ascii(c) (tolower_map[(unsigned char)(c)])
+#define zend_tolower_ascii(c) (tolower_map[(unsigned char)(c)]) //将大写ascii字符转换成小写ascii字符(根据转换表)
 
 /**
  * Functions using locale lowercase:
@@ -2525,6 +2525,7 @@ ZEND_API void zend_update_current_locale(void) /* {{{ */
 /* }}} */
 #endif
 
+//将长度为length的source字符串转换为小写形式拷贝到dest(c风格字符串)
 ZEND_API char* ZEND_FASTCALL zend_str_tolower_copy(char *dest, const char *source, size_t length) /* {{{ */
 {
 	register unsigned char *str = (unsigned char*)source;

@@ -40,7 +40,7 @@
 
 #define ZEND_MM_ALIGNMENT_MASK ~(ZEND_MM_ALIGNMENT - Z_L(1))
 
-#define ZEND_MM_ALIGNED_SIZE(size)	(((size) + ZEND_MM_ALIGNMENT - Z_L(1)) & ZEND_MM_ALIGNMENT_MASK)
+#define ZEND_MM_ALIGNED_SIZE(size)	(((size) + ZEND_MM_ALIGNMENT - Z_L(1)) & ZEND_MM_ALIGNMENT_MASK)    //计算size按ZEND_MM_ALIGNMENT内存对其后的大小
 
 #define ZEND_MM_ALIGNED_SIZE_EX(size, alignment) \
 	(((size) + ((alignment) - Z_L(1))) & ~((alignment) - Z_L(1)))

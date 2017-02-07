@@ -194,6 +194,7 @@ enum pdo_null_handling {
 };
 
 /* {{{ utils for reading attributes set as driver_options */
+//从options中查找名为option_name的整型属性值，若未找到返回默认值defval
 static inline zend_long pdo_attr_lval(zval *options, enum pdo_attribute_type option_name, zend_long defval)
 {
 	zval *v;
@@ -203,6 +204,8 @@ static inline zend_long pdo_attr_lval(zval *options, enum pdo_attribute_type opt
 	}
 	return defval;
 }
+
+//从options中查找名为option_name的字符串型属性值，若未找到返回默认值defval
 static inline zend_string *pdo_attr_strval(zval *options, enum pdo_attribute_type option_name, zend_string *defval)
 {
 	zval *v;
@@ -428,7 +431,7 @@ struct _pdo_dbh_t {
 	/* driver specific methods */
 	struct pdo_dbh_methods *methods;
 	/* driver specific data */
-	void *driver_data;
+	void *driver_data;  //例如:对于mysql是pdo_mysql_db_handle对象
 
 	/* credentials */
 	char *username, *password;
@@ -440,20 +443,20 @@ struct _pdo_dbh_t {
 	/* if true, driver should act as though a COMMIT were executed between
 	 * each executed statement; otherwise, COMMIT must be carried out manually
 	 * */
-	unsigned auto_commit:1;
+	unsigned auto_commit:1; //用户设定此标志位
 
 	/* if true, the handle has been closed and will not function anymore */
 	unsigned is_closed:1;
 
 	/* if true, the driver requires that memory be allocated explicitly for
 	 * the columns that are returned */
-	unsigned alloc_own_columns:1;
+	unsigned alloc_own_columns:1;   //驱动设定此标志位
 
 	/* if true, commit or rollBack is allowed to be called */
 	unsigned in_txn:1;
 
 	/* max length a single character can become after correct quoting */
-	unsigned max_escaped_char_length:3;
+	unsigned max_escaped_char_length:3; //驱动设定此标志位
 
 	/* oracle compat; see enum pdo_null_handling */
 	unsigned oracle_nulls:2;
@@ -661,8 +664,8 @@ PDO_API void php_pdo_unregister_driver(pdo_driver_t *driver);
  * according to the data you pass in and array of pdo_data_src_parser structures */
 struct pdo_data_src_parser {
 	const char *optname;
-	char *optval;
-	int freeme;
+	char *optval;   //存储optname字段对应的默认值或者解析后获取的对应值
+	int freeme; //表明当覆盖写optval字段时是否需要释放该字段之前的内存空间
 };
 
 PDO_API int php_pdo_parse_data_source(const char *data_source,

@@ -45,7 +45,7 @@ static PHP_GINIT_FUNCTION(pdo);
 /* True global resources - no need for thread safety here */
 
 /* the registry of PDO drivers */
-HashTable pdo_driver_hash;
+HashTable pdo_driver_hash;  //存储所有注册的pdo驱动(pdo_driver_t)
 
 /* we use persistent resources for the driver connection stuff */
 static int le_ppdo;
@@ -188,13 +188,19 @@ pdo_driver_t *pdo_find_driver(const char *name, int namelen) /* {{{ */
 }
 /* }}} */
 
+/*
+分析data_source中的数据填写到parsed对应字段中
+data_source的数据格式:"name=value; name2=value2"
+name,value和=之间没有空白
+name,value对之间以;进行分割，当value中有;时，使用;;进行转义
+*/
 PDO_API int php_pdo_parse_data_source(const char *data_source, zend_ulong data_source_len, struct pdo_data_src_parser *parsed, int nparams) /* {{{ */
 {
 	zend_ulong i;
 	int j;
-	int valstart = -1;
+	int valstart = -1;  //选项值的起始索引
 	int semi = -1;
-	int optstart = 0;
+	int optstart = 0;   //选项名的起始索引
 	int nlen;
 	int n_matches = 0;
 	int n_semicolumns = 0;
@@ -226,7 +232,7 @@ PDO_API int php_pdo_parse_data_source(const char *data_source, zend_ulong data_s
 				if ((i + 1 >= data_source_len) || data_source[i+1] != ';') {
 					semi = i++;
 					break;
-				} else {
+				} else {    //两个连续的分号(;;)
 					n_semicolumns++;
 					i += 2;
 					continue;
@@ -240,7 +246,7 @@ PDO_API int php_pdo_parse_data_source(const char *data_source, zend_ulong data_s
 		}
 
 		/* find the entry in the array */
-		nlen = valstart - optstart - 1;
+		nlen = valstart - optstart - 1; //计算选项名的长度
 		for (j = 0; j < nparams; j++) {
 			if (0 == strncmp(data_source + optstart, parsed[j].optname, nlen) && parsed[j].optname[nlen] == '\0') {
 				/* got a match */

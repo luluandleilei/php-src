@@ -102,11 +102,11 @@ typedef struct {
 
 /* stuff we use in a mySQL database handle */
 typedef struct {
-	MYSQL 		*server;
+	MYSQL 		*server;    //mysqlÊý¾Ý¿â¾ä±ú
 
-	unsigned attached:1;
+	unsigned attached:1;    
 	unsigned buffered:1;
-	unsigned emulate_prepare:1;
+	unsigned emulate_prepare:1; //
 	unsigned fetch_table_names:1;
 	unsigned _reserved:31;
 #if !PDO_USE_MYSQLND

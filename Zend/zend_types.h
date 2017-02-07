@@ -152,7 +152,7 @@ typedef struct _zend_refcounted_h {
 				zend_uchar    flags,    /* used for strings & objects */
 				uint16_t      gc_info)  /* keeps GC root number (or 0) and color */
 		} v;
-		uint32_t type_info;
+		uint32_t type_info; //0-8位表示类型，8-16位表示flag
 	} u;
 } zend_refcounted_h;
 

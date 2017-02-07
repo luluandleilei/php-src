@@ -216,14 +216,14 @@ SAPI_API void sapi_terminate_process(void);
 END_EXTERN_C()
 
 struct _sapi_module_struct {
-	char *name;				//名字
-	char *pretty_name;		//更好理解的名字
+	char *name; //名字
+	char *pretty_name;  //更好理解的名字
 
 	int (*startup)(struct _sapi_module_struct *sapi_module);	//启动方法
 	int (*shutdown)(struct _sapi_module_struct *sapi_module);   //关闭方法
 
-	int (*activate)(void);		//激活
-	int (*deactivate)(void);	//停用
+	int (*activate)(void);  //激活
+	int (*deactivate)(void);    //停用
 
 	size_t (*ub_write)(const char *str, size_t str_length);  //不缓存的写操作(unbuffered write)
 	void (*flush)(void *server_context);	//flush

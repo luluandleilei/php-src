@@ -37,7 +37,7 @@
 #endif
 
 /* these variables are true statics/globals, and have to be mutex'ed on every access */
-ZEND_API HashTable module_registry;
+ZEND_API HashTable module_registry; //´æ´¢ËùÓÐ×¢²áµÄÀ©Õ¹Ä£¿éå
 
 static zend_module_entry **module_request_startup_handlers;
 static zend_module_entry **module_request_shutdown_handlers;
@@ -3588,6 +3588,7 @@ ZEND_API int zend_fcall_info_call(zend_fcall_info *fci, zend_fcall_info_cache *f
 }
 /* }}} */
 
+//»ñÈ¡Ä£¿éÃûÎªmodule_nameµÄÄ£¿éµÄ°æ±¾ÐÅÏ¢×Ö·û´®
 ZEND_API const char *zend_get_module_version(const char *module_name) /* {{{ */
 {
 	zend_string *lname;

@@ -666,6 +666,7 @@ void php_get_windows_cpu(char *buf, int bufsize)
 #endif
 
 /* {{{ php_get_uname
+获取调用系统调用uname的结果字符串
  */
 PHPAPI zend_string *php_get_uname(char mode)
 {
@@ -730,7 +731,7 @@ PHPAPI zend_string *php_get_uname(char mode)
 #else
 #ifdef HAVE_SYS_UTSNAME_H
 	struct utsname buf;
-	if (uname((struct utsname *)&buf) == -1) {
+	if (uname((struct utsname *)&buf) == -1) {  //调用系统函数uname
 		php_uname = PHP_UNAME;
 	} else {
 		if (mode == 's') {

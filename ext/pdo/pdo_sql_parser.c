@@ -383,7 +383,7 @@ yy39:
 struct placeholder {
 	char *pos;
 	size_t len;
-	int bindno;
+	int bindno; //sql参数的位置索引
 	size_t qlen;		/* quoted length of value */
 	char *quoted;	/* quoted value */
 	int freeq;

@@ -38,10 +38,10 @@ END_EXTERN_C()
 
 /* Shortcuts */
 
-#define ZSTR_VAL(zstr)  (zstr)->val
-#define ZSTR_LEN(zstr)  (zstr)->len
-#define ZSTR_H(zstr)    (zstr)->h
-#define ZSTR_HASH(zstr) zend_string_hash_val(zstr)
+#define ZSTR_VAL(zstr)  (zstr)->val //获取字符串的首地址
+#define ZSTR_LEN(zstr)  (zstr)->len //获取字符串的长度
+#define ZSTR_H(zstr)    (zstr)->h   //获取字符串的hash值
+#define ZSTR_HASH(zstr) zend_string_hash_val(zstr)  //获取字符串的hash值(若不存在则计算)
 
 /* Compatibility macros */
 
@@ -58,9 +58,9 @@ END_EXTERN_C()
 
 #define ZSTR_EMPTY_ALLOC()				CG(empty_string)
 
-#define _ZSTR_HEADER_SIZE XtOffsetOf(zend_string, val)
+#define _ZSTR_HEADER_SIZE XtOffsetOf(zend_string, val)  //获取val字段相对于zend_string结构体偏移量的大小
 
-#define _ZSTR_STRUCT_SIZE(len) (_ZSTR_HEADER_SIZE + len + 1)
+#define _ZSTR_STRUCT_SIZE(len) (_ZSTR_HEADER_SIZE + len + 1)    //计算用zend_string对象存储长度为len字节的字符串(包括最后的\0)所需要分配的空间的大小(通过获取存储字符串位置相对于zend_string的偏移位置消除了由于结构体内存对其而造成的内存空间浪费)
 
 #define ZSTR_ALLOCA_ALLOC(str, _len, use_heap) do { \
 	(str) = (zend_string *)do_alloca(ZEND_MM_ALIGNED_SIZE_EX(_ZSTR_STRUCT_SIZE(_len), 8), (use_heap)); \
@@ -117,6 +117,9 @@ static zend_always_inline uint32_t zend_string_delref(zend_string *s)
 	return 1;
 }
 
+//分配存储len字节大小的zend_string的对象
+//参数: len --
+//返回值: 指向zend_string对象的指针
 static zend_always_inline zend_string *zend_string_alloc(size_t len, int persistent)
 {
 	zend_string *ret = (zend_string *)pemalloc(ZEND_MM_ALIGNED_SIZE(_ZSTR_STRUCT_SIZE(len)), persistent);
