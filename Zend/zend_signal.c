@@ -356,6 +356,7 @@ static void zend_signal_globals_ctor(zend_signal_globals_t *zend_signal_globals)
 
 	memset(zend_signal_globals, 0, sizeof(*zend_signal_globals));
 
+    //链接所有zend_signal_globals_t.pstorage结点到zend_signal_globals_t.pavail指向的链表
 	for (x = 0; x < sizeof(zend_signal_globals->pstorage) / sizeof(*zend_signal_globals->pstorage); ++x) {
 		zend_signal_queue_t *queue = &zend_signal_globals->pstorage[x];
 		queue->zend_signal.signo = 0;

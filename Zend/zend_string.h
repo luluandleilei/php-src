@@ -156,6 +156,7 @@ static zend_always_inline zend_string *zend_string_safe_alloc(size_t n, size_t m
 	return ret;
 }
 
+//创建一个zend_string对象
 static zend_always_inline zend_string *zend_string_init(const char *str, size_t len, int persistent)
 {
 	zend_string *ret = zend_string_alloc(len, persistent);

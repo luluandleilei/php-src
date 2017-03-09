@@ -1587,9 +1587,9 @@ int main(int argc, char *argv[])
 	int requests = 0;
 	int fcgi_fd = 0;
 	fcgi_request *request;
-	char *fpm_config = NULL;
-	char *fpm_prefix = NULL;
-	char *fpm_pid = NULL;
+	char *fpm_config = NULL;    //配置文件路径
+	char *fpm_prefix = NULL;    //前缀目录
+	char *fpm_pid = NULL;   //pid文件路径
 	int test_conf = 0;
 	int force_daemon = -1;
 	int force_stderr = 0;

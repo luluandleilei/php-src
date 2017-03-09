@@ -72,7 +72,7 @@ static void sapi_globals_dtor(sapi_globals_struct *sapi_globals)
 }
 
 /* True globals (no need for thread safety) */
-SAPI_API sapi_module_struct sapi_module;
+SAPI_API sapi_module_struct sapi_module;    //指明当前使用的是哪一种sapi
 
 
 SAPI_API void sapi_startup(sapi_module_struct *sf)

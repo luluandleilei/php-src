@@ -131,7 +131,7 @@ typedef struct _sapi_globals_struct {
 	int options;
 	zend_bool sapi_started;
 	double global_request_time;
-	HashTable known_post_content_types;
+	HashTable known_post_content_types; //string --> sapi_post_entry
 	zval callback_func;
 	zend_fcall_info_cache fci_cache;
 } sapi_globals_struct;
@@ -216,35 +216,35 @@ SAPI_API void sapi_terminate_process(void);
 END_EXTERN_C()
 
 struct _sapi_module_struct {
-	char *name; //名字
-	char *pretty_name;  //更好理解的名字
+	char *name; //名字  //应用层的名称，比如cgi，apache等
+	char *pretty_name;  //更好理解的名字    /应用层更易读的名字
 
-	int (*startup)(struct _sapi_module_struct *sapi_module);	//启动方法
-	int (*shutdown)(struct _sapi_module_struct *sapi_module);   //关闭方法
+	int (*startup)(struct _sapi_module_struct *sapi_module);	//启动方法   //startup 函数指针, 当一个应用要调用PHP的时候，这个函数会被调用
+	int (*shutdown)(struct _sapi_module_struct *sapi_module);   //关闭方法  // shutdown 函数指针，
 
-	int (*activate)(void);  //激活
-	int (*deactivate)(void);    //停用
+	int (*activate)(void);  //激活   //active 函数指针，PHP会在每个request的时候，处理一些初始化，资源分配的事务。这部分就是activate字段要定义的
+	int (*deactivate)(void);    //停用  //deactivate函数指针，这个是对应与activate的函数，顾名思义，它会提供一个handler, 用来处理收尾工作
 
-	size_t (*ub_write)(const char *str, size_t str_length);  //不缓存的写操作(unbuffered write)
-	void (*flush)(void *server_context);	//flush
-	zend_stat_t *(*get_stat)(void);			//get uid
-	char *(*getenv)(char *name, size_t name_len);	//get env
+	size_t (*ub_write)(const char *str, size_t str_length);  //不缓存的写操作(unbuffered write) //这个hanlder告诉了php如何输出数据，比如cgi和fpm模式下输出数据方式肯定不一样
+	void (*flush)(void *server_context);	//flush //这个是提供给php的刷新缓存的函数指针
+	zend_stat_t *(*get_stat)(void);			//get uid      //这部分用来让php可以验证一个要执行脚本文件的state，从而判断文件是否据有执行权限等等
+	char *(*getenv)(char *name, size_t name_len);	//get env   //为Zend提供了一个根据name来查找环境变量的接口
 
-	void (*sapi_error)(int type, const char *error_msg, ...) ZEND_ATTRIBUTE_FORMAT(printf, 2, 3);
+	void (*sapi_error)(int type, const char *error_msg, ...) ZEND_ATTRIBUTE_FORMAT(printf, 2, 3);    //错误处理函数指针
 
-	int (*header_handler)(sapi_header_struct *sapi_header, sapi_header_op_enum op, sapi_headers_struct *sapi_headers);
-	int (*send_headers)(sapi_headers_struct *sapi_headers);
-	void (*send_header)(sapi_header_struct *sapi_header, void *server_context);
+	int (*header_handler)(sapi_header_struct *sapi_header, sapi_header_op_enum op, sapi_headers_struct *sapi_headers);  // 这个函数会在我们调用PHP的header()函数的时候被调用
+	int (*send_headers)(sapi_headers_struct *sapi_headers);  //这个函数会在要真正发送header的时候被调用，一般来说，就是当有任何的输出要发送之前
+	void (*send_header)(sapi_header_struct *sapi_header, void *server_context); //单独发送每一个header的函数指针
 
-	size_t (*read_post)(char *buffer, size_t count_bytes);
-	char *(*read_cookies)(void);
+	size_t (*read_post)(char *buffer, size_t count_bytes);  //这个句函数指针明了如何获取POST的数据
+	char *(*read_cookies)(void);    //这个句函数指针明了如何获取COOKIE的数据
 
-	void (*register_server_variables)(zval *track_vars_array);
-	void (*log_message)(char *message, int syslog_type_int);
-	double (*get_request_time)(void);
+	void (*register_server_variables)(zval *track_vars_array);   //这个函数给了一个接口，用以给$_SERVER变量中添加变量 
+	void (*log_message)(char *message, int syslog_type_int);     //用来输出错误信息的函数指针
+	double (*get_request_time)(void);   //获得请求时间的函数指针
 	void (*terminate_process)(void);
 
-	char *php_ini_path_override;	//覆盖的ini路径
+	char *php_ini_path_override;	//覆盖的php.ini文件路径
 
 	void (*default_post_reader)(void);
 	void (*treat_data)(int arg, char *str, zval *destArray);
