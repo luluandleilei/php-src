@@ -54,70 +54,70 @@ typedef struct _arg_separators {
 } arg_separators;
 
 struct _php_core_globals {
-	zend_bool implicit_flush; //æ˜¯å¦è¦æ±‚phpè¾“å‡ºå±‚åœ¨æ¯ä¸ªè¾“å‡ºå—ä¹‹åè‡ªåŠ¨åˆ·æ–°æ•°æ®
+	zend_bool implicit_flush;   //ÊÇ·ñÒªÇóphpÊä³ö²ãÔÚÃ¿¸öÊä³ö¿éÖ®ºó×Ô¶¯Ë¢ĞÂÊı¾İ
 
-	zend_long output_buffering; //è¾“å‡ºç¼“å†²åŒºå¤§å°(å­—èŠ‚)
+	zend_long output_buffering; //Êä³ö»º³åÇø´óĞ¡(×Ö½Ú)
 
-	zend_bool enable_dl; //æ˜¯å¦å…è®¸ä½¿ç”¨dl()å‡½æ•°ã€‚dl()å‡½æ•°ä»…åœ¨å°†PHPä½œä¸ºapacheæ¨¡å—å®‰è£…æ—¶æ‰æœ‰æ•ˆã€‚
+	zend_bool enable_dl;    //ÊÇ·ñÔÊĞíÊ¹ÓÃdl()º¯Êı¡£dl()º¯Êı½öÔÚ½«PHP×÷ÎªapacheÄ£¿é°²×°Ê±²ÅÓĞĞ§¡£
 
-	char *output_handler; //å°†æ‰€æœ‰è„šæœ¬çš„è¾“å‡ºé‡å®šå‘åˆ°ä¸€ä¸ªè¾“å‡ºå¤„ç†å‡½æ•°ã€‚
+	char *output_handler;   //½«ËùÓĞ½Å±¾µÄÊä³öÖØ¶¨Ïòµ½Ò»¸öÊä³ö´¦Àíº¯Êı¡£
 
-	char *unserialize_callback_func; //å¦‚æœè§£åºåˆ—åŒ–å¤„ç†å™¨éœ€è¦å®ä¾‹åŒ–ä¸€ä¸ªæœªå®šä¹‰çš„ç±»ï¼Œè¿™é‡ŒæŒ‡å®šçš„å›è°ƒå‡½æ•°å°†ä»¥è¯¥æœªå®šä¹‰ç±»çš„åå­—ä½œä¸ºå‚æ•°è¢«unserialize()è°ƒç”¨
-	zend_long serialize_precision; //å°†æµ®ç‚¹å‹å’ŒåŒç²¾åº¦å‹æ•°æ®åºåˆ—åŒ–å­˜å‚¨æ—¶çš„ç²¾åº¦(æœ‰æ•ˆä½æ•°)ã€‚
+	char *unserialize_callback_func;    //Èç¹û½âĞòÁĞ»¯´¦ÀíÆ÷ĞèÒªÊµÀı»¯Ò»¸öÎ´¶¨ÒåµÄÀà£¬ÕâÀïÖ¸¶¨µÄ»Øµ÷º¯Êı½«ÒÔ¸ÃÎ´¶¨ÒåÀàµÄÃû×Ö×÷Îª²ÎÊı±»unserialize()µ÷ÓÃ
+	zend_long serialize_precision;  //½«¸¡µãĞÍºÍË«¾«¶ÈĞÍÊı¾İĞòÁĞ»¯´æ´¢Ê±µÄ¾«¶È(ÓĞĞ§Î»Êı)¡£
 
-	zend_long memory_limit; //ä¸€ä¸ªè„šæœ¬æ‰€èƒ½å¤Ÿç”³è¯·åˆ°çš„æœ€å¤§å†…å­˜å­—èŠ‚æ•°(å¯ä»¥ç”¨Kå’ŒMä½œä¸ºå•ä½)ã€‚
-	zend_long max_input_time; //æ¯ä¸ªè„šæœ¬è§£æè¾“å…¥æ•°æ®(POST, GET, upload)çš„æœ€å¤§å…è®¸æ—¶é—´(ç§’)
+	zend_long memory_limit; //Ò»¸ö½Å±¾ËùÄÜ¹»ÉêÇëµ½µÄ×î´óÄÚ´æ×Ö½ÚÊı(¿ÉÒÔÓÃKºÍM×÷Îªµ¥Î»)¡£
+	zend_long max_input_time;    //Ã¿¸ö½Å±¾½âÎöÊäÈëÊı¾İ(POST, GET, upload)µÄ×î´óÔÊĞíÊ±¼ä(Ãë)
 
-	zend_bool track_errors; //æ˜¯å¦åœ¨å˜é‡$php_errormsgä¸­ä¿å­˜æœ€è¿‘ä¸€ä¸ªé”™è¯¯æˆ–è­¦å‘Šæ¶ˆæ¯
-	zend_bool display_errors; //æ˜¯å¦å°†é”™è¯¯ä¿¡æ¯ä½œä¸ºè¾“å‡ºçš„ä¸€éƒ¨åˆ†æ˜¾ç¤º
-	zend_bool display_startup_errors; //æ˜¯å¦æ˜¾ç¤ºPHPå¯åŠ¨æ—¶çš„é”™è¯¯
-	zend_bool log_errors; //æ˜¯å¦åœ¨æ—¥å¿—æ–‡ä»¶é‡Œè®°å½•é”™è¯¯ï¼Œå…·ä½“åœ¨å“ªé‡Œè®°å½•å–å†³äºerror_logæŒ‡ä»¤
-	zend_long      log_errors_max_len; //è®¾ç½®é”™è¯¯æ—¥å¿—ä¸­é™„åŠ çš„ä¸é”™è¯¯ä¿¡æ¯ç›¸å…³è”çš„é”™è¯¯æºçš„æœ€å¤§é•¿åº¦
-	zend_bool ignore_repeated_errors; //è®°å½•é”™è¯¯æ—¥å¿—æ—¶æ˜¯å¦å¿½ç•¥é‡å¤çš„é”™è¯¯ä¿¡æ¯
-	zend_bool ignore_repeated_source; //æ˜¯å¦åœ¨å¿½ç•¥é‡å¤çš„é”™è¯¯ä¿¡æ¯æ—¶å¿½ç•¥é‡å¤çš„é”™è¯¯æº
-	zend_bool report_memleaks; //æ˜¯å¦æŠ¥å‘Šå†…å­˜æ³„æ¼
-	char *error_log; //å°†é”™è¯¯æ—¥å¿—è®°å½•åˆ°å“ªä¸ªæ–‡ä»¶ä¸­
+	zend_bool track_errors; //ÊÇ·ñÔÚ±äÁ¿$php_errormsgÖĞ±£´æ×î½üÒ»¸ö´íÎó»ò¾¯¸æÏûÏ¢
+	zend_bool display_errors; //ÊÇ·ñ½«´íÎóĞÅÏ¢×÷ÎªÊä³öµÄÒ»²¿·ÖÏÔÊ¾
+	zend_bool display_startup_errors; //ÊÇ·ñÏÔÊ¾PHPÆô¶¯Ê±µÄ´íÎó
+	zend_bool log_errors;  //ÊÇ·ñÔÚÈÕÖ¾ÎÄ¼şÀï¼ÇÂ¼´íÎó£¬¾ßÌåÔÚÄÄÀï¼ÇÂ¼È¡¾öÓÚerror_logÖ¸Áî
+	zend_long      log_errors_max_len; //ÉèÖÃ´íÎóÈÕÖ¾ÖĞ¸½¼ÓµÄÓë´íÎóĞÅÏ¢Ïà¹ØÁªµÄ´íÎóÔ´µÄ×î´ó³¤¶È
+	zend_bool ignore_repeated_errors; //¼ÇÂ¼´íÎóÈÕÖ¾Ê±ÊÇ·ñºöÂÔÖØ¸´µÄ´íÎóĞÅÏ¢
+	zend_bool ignore_repeated_source; //ÊÇ·ñÔÚºöÂÔÖØ¸´µÄ´íÎóĞÅÏ¢Ê±ºöÂÔÖØ¸´µÄ´íÎóÔ´
+	zend_bool report_memleaks; //ÊÇ·ñ±¨¸æÄÚ´æĞ¹Â©
+	char *error_log; //½«´íÎóÈÕÖ¾¼ÇÂ¼µ½ÄÄ¸öÎÄ¼şÖĞ
 
-	char *doc_root; //PHPçš„â€œæ ¹ç›®å½•â€
-	char *user_dir; //å‘Šè¯‰phpåœ¨ä½¿ç”¨/~username æ‰“å¼€è„šæœ¬æ—¶åˆ°å“ªä¸ªç›®å½•ä¸‹å»æ‰¾
-	char *include_path; //æŒ‡å®šä¸€ç»„ç›®å½•ç”¨äºrequire()ã€include()ã€fopen_with_path()å‡½æ•°å»å¯»æ‰¾
-	char *open_basedir; //å°†phpå…è®¸æ“ä½œçš„æ‰€æœ‰æ–‡ä»¶(åŒ…æ‹¬æ–‡ä»¶è‡ªèº«)éƒ½é™åˆ¶åœ¨æ­¤ç»„ç›®å½•åˆ—è¡¨ä¸‹
-	char *extension_dir; //å­˜æ”¾æ‰©å±•åº“(æ¨¡å—)çš„ç›®å½•ï¼Œä¹Ÿå°±æ˜¯phpç”¨æ¥å¯»æ‰¾åŠ¨æ€æ‰©å±•æ¨¡å—çš„ç›®å½•
+	char *doc_root; //PHPµÄ¡°¸ùÄ¿Â¼¡±
+	char *user_dir; //¸æËßphpÔÚÊ¹ÓÃ/~username ´ò¿ª½Å±¾Ê±µ½ÄÄ¸öÄ¿Â¼ÏÂÈ¥ÕÒ
+	char *include_path; //Ö¸¶¨Ò»×éÄ¿Â¼ÓÃÓÚrequire()¡¢include()¡¢fopen_with_path()º¯ÊıÈ¥Ñ°ÕÒ
+	char *open_basedir; //½«phpÔÊĞí²Ù×÷µÄËùÓĞÎÄ¼ş(°üÀ¨ÎÄ¼ş×ÔÉí)¶¼ÏŞÖÆÔÚ´Ë×éÄ¿Â¼ÁĞ±íÏÂ
+	char *extension_dir; //´æ·ÅÀ©Õ¹¿â(Ä£¿é)µÄÄ¿Â¼£¬Ò²¾ÍÊÇphpÓÃÀ´Ñ°ÕÒ¶¯Ì¬À©Õ¹Ä£¿éµÄÄ¿Â¼
 	char *php_binary;
 	char *sys_temp_dir;
 
-	char *upload_tmp_dir; //æ–‡ä»¶ä¸Šä¼ æ—¶å­˜æ”¾æ–‡ä»¶çš„ä¸´æ—¶ç›®å½•
-	zend_long upload_max_filesize; //å…è®¸ä¸Šä¼ çš„æ–‡ä»¶çš„æœ€å¤§å°ºå¯¸
+	char *upload_tmp_dir; //ÎÄ¼şÉÏ´«Ê±´æ·ÅÎÄ¼şµÄÁÙÊ±Ä¿Â¼
+	zend_long upload_max_filesize; //ÔÊĞíÉÏ´«µÄÎÄ¼şµÄ×î´ó³ß´ç
 
-	char *error_append_string; //ç”¨äºé”™è¯¯ä¿¡æ¯åè¾“å‡ºçš„å­—ç¬¦ä¸²
-	char *error_prepend_string; //ç”¨äºé”™è¯¯ä¿¡æ¯å‰è¾“å‡ºçš„å­—ç¬¦ä¸²
+	char *error_append_string; //ÓÃÓÚ´íÎóĞÅÏ¢ºóÊä³öµÄ×Ö·û´®
+	char *error_prepend_string; //ÓÃÓÚ´íÎóĞÅÏ¢Ç°Êä³öµÄ×Ö·û´®
 
-	char *auto_prepend_file; //æŒ‡å®šåœ¨ä¸»æ–‡ä»¶ä¹‹å‰è‡ªåŠ¨è§£æçš„æ–‡ä»¶å
-	char *auto_append_file; //æŒ‡å®šåœ¨ä¸»æ–‡ä»¶ä¹‹åè‡ªåŠ¨è§£æçš„æ–‡ä»¶å
+	char *auto_prepend_file; //Ö¸¶¨ÔÚÖ÷ÎÄ¼şÖ®Ç°×Ô¶¯½âÎöµÄÎÄ¼şÃû
+	char *auto_append_file; //Ö¸¶¨ÔÚÖ÷ÎÄ¼şÖ®ºó×Ô¶¯½âÎöµÄÎÄ¼şÃû
 
 	char *input_encoding;
 	char *internal_encoding;
 	char *output_encoding;
 
-	arg_separators arg_separator; //phpæ‰€äº§ç”Ÿçš„URLä¸­ç”¨æ¥åˆ†éš”å‚æ•°çš„åˆ†éš”ç¬¦
+	arg_separators arg_separator; //phpËù²úÉúµÄURLÖĞÓÃÀ´·Ö¸ô²ÎÊıµÄ·Ö¸ô·û
 
-	char *variables_order; //phpæ³¨å†ŒEnvironmentã€GETã€POSTã€Cookieã€Serverå˜é‡çš„é¡ºåº
+	char *variables_order; //php×¢²áEnvironment¡¢GET¡¢POST¡¢Cookie¡¢Server±äÁ¿µÄË³Ğò
 
-	HashTable rfc1867_protected_variables; //RFC1867ä¿æŠ¤çš„å˜é‡åï¼Œåœ¨main/rfc1867.cæ–‡ä»¶ä¸­æœ‰ç”¨åˆ°æ­¤å˜é‡
+	HashTable rfc1867_protected_variables; //RFC1867±£»¤µÄ±äÁ¿Ãû£¬ÔÚmain/rfc1867.cÎÄ¼şÖĞÓĞÓÃµ½´Ë±äÁ¿
 
-	short connection_status; //è¿æ¥çŠ¶æ€ï¼Œæœ‰ä¸‰ä¸ªçŠ¶æ€ï¼Œæ­£å¸¸ï¼Œä¸­æ–­ï¼Œè¶…æ—¶
-	short ignore_user_abort; //æ˜¯å¦å³ä½¿åœ¨ç”¨æˆ·ç»ˆæ­¢è¯·æ±‚åä¹ŸåšæŒå®Œæˆæ•´ä¸ªè¯·æ±‚
+	short connection_status; //Á¬½Ó×´Ì¬£¬ÓĞÈı¸ö×´Ì¬£¬Õı³££¬ÖĞ¶Ï£¬³¬Ê±
+	short ignore_user_abort; //ÊÇ·ñ¼´Ê¹ÔÚÓÃ»§ÖÕÖ¹ÇëÇóºóÒ²¼á³ÖÍê³ÉÕû¸öÇëÇó
 
-	unsigned char header_is_being_sent; //æ˜¯å¦å¤´ä¿¡æ¯æ­£åœ¨å‘é€
+	unsigned char header_is_being_sent; //ÊÇ·ñÍ·ĞÅÏ¢ÕıÔÚ·¢ËÍ
 
-	zend_llist tick_functions; //ä»…åœ¨main/php_ticks.cæ–‡ä»¶ä¸­æœ‰ç”¨åˆ°ï¼Œæ­¤å¤„å®šä¹‰çš„å‡½æ•°åœ¨register_trick_functionç­‰å‡½æ•°ä¸­æœ‰ç”¨åˆ°
+	zend_llist tick_functions; //½öÔÚmain/php_ticks.cÎÄ¼şÖĞÓĞÓÃµ½£¬´Ë´¦¶¨ÒåµÄº¯ÊıÔÚregister_trick_functionµÈº¯ÊıÖĞÓĞÓÃµ½
 
-	zval http_globals[6]; //å­˜æ”¾GETã€POSTã€SERVERç­‰ä¿¡æ¯
+	zval http_globals[6];  //´æ·ÅGET¡¢POST¡¢SERVERµÈĞÅÏ¢
 
-	zend_bool expose_php; //æ˜¯å¦å±•ç¤ºphpçš„ä¿¡æ¯
+	zend_bool expose_php; //ÊÇ·ñÕ¹Ê¾phpµÄĞÅÏ¢
 
-	zend_bool register_argc_argv; //æ˜¯å¦å£°æ˜$argvå’Œ$argcå…¨å±€å˜é‡(åŒ…å«ç”¨GETæ–¹æ³•çš„ä¿¡æ¯)
-	zend_bool auto_globals_jit; //æ˜¯å¦ä»…åœ¨ä½¿ç”¨åˆ°$_SERVERå’Œ$_ENVå˜é‡æ—¶æ‰åˆ›å»º(è€Œä¸æ˜¯åœ¨è„šæœ¬ä¸€å¯åŠ¨æ—¶å°±è‡ªåŠ¨åˆ›å»º)
+	zend_bool register_argc_argv; //ÊÇ·ñÉùÃ÷$argvºÍ$argcÈ«¾Ö±äÁ¿(°üº¬ÓÃGET·½·¨µÄĞÅÏ¢)
+	zend_bool auto_globals_jit; //ÊÇ·ñ½öÔÚÊ¹ÓÃµ½$_SERVERºÍ$_ENV±äÁ¿Ê±²Å´´½¨(¶ø²»ÊÇÔÚ½Å±¾Ò»Æô¶¯Ê±¾Í×Ô¶¯´´½¨)
 
 	char *docref_root; 
 	char *docref_ext;

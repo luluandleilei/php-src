@@ -117,7 +117,7 @@ typedef struct {
 
 
 typedef struct _sapi_globals_struct {
-	void *server_context;
+	void *server_context;   //特定的sapi的数据
 	sapi_request_info request_info;
 	sapi_headers_struct sapi_headers;
 	int64_t read_post_bytes;
