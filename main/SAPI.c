@@ -45,11 +45,11 @@
 
 #include "php_content_types.h"
 
-#ifdef ZTS
-SAPI_API int sapi_globals_id;
-#else
+//#ifdef ZTS
+//SAPI_API int sapi_globals_id;
+//#else
 sapi_globals_struct sapi_globals;
-#endif
+//#endif
 
 static void _type_dtor(zval *zv)
 {
@@ -89,9 +89,9 @@ SAPI_API void sapi_startup(sapi_module_struct *sf)
 	sapi_globals_ctor(&sapi_globals);
 #endif
 
-#ifdef PHP_WIN32
-	tsrm_win32_startup();
-#endif
+//#ifdef PHP_WIN32
+//	tsrm_win32_startup();
+//#endif
 
 	reentrancy_startup();
 }

@@ -111,11 +111,11 @@
 
 PHPAPI int (*php_register_internal_extensions_func)(void) = php_register_internal_extensions;
 
-#ifndef ZTS
+//#ifndef ZTS
 php_core_globals core_globals;
-#else
-PHPAPI int core_globals_id;
-#endif
+//#else
+//PHPAPI int core_globals_id;
+//#endif
 
 #define SAFE_FILENAME(f) ((f)?(f):"-")
 
@@ -974,26 +974,26 @@ PHPAPI ZEND_COLD void php_error_docref2(const char *docref, const char *param1, 
 }
 /* }}} */
 
-#ifdef PHP_WIN32
-#define PHP_WIN32_ERROR_MSG_BUFFER_SIZE 512
-PHPAPI ZEND_COLD void php_win32_docref2_from_error(DWORD error, const char *param1, const char *param2) {
-	if (error == 0) {
-		php_error_docref2(NULL, param1, param2, E_WARNING, "%s", strerror(errno));
-	} else {
-		char buf[PHP_WIN32_ERROR_MSG_BUFFER_SIZE + 1];
-		int buf_len;
-
-		FormatMessage(FORMAT_MESSAGE_FROM_SYSTEM, NULL, error, 0, buf, PHP_WIN32_ERROR_MSG_BUFFER_SIZE, NULL);
-		buf_len = (int)strlen(buf);
-		if (buf_len >= 2) {
-			buf[buf_len - 1] = '\0';
-			buf[buf_len - 2] = '\0';
-		}
-		php_error_docref2(NULL, param1, param2, E_WARNING, "%s (code: %lu)", (char *)buf, error);
-	}
-}
-#undef PHP_WIN32_ERROR_MSG_BUFFER_SIZE
-#endif
+//#ifdef PHP_WIN32
+//#define PHP_WIN32_ERROR_MSG_BUFFER_SIZE 512
+//PHPAPI ZEND_COLD void php_win32_docref2_from_error(DWORD error, const char *param1, const char *param2) {
+//	if (error == 0) {
+//		php_error_docref2(NULL, param1, param2, E_WARNING, "%s", strerror(errno));
+//	} else {
+//		char buf[PHP_WIN32_ERROR_MSG_BUFFER_SIZE + 1];
+//		int buf_len;
+//
+//		FormatMessage(FORMAT_MESSAGE_FROM_SYSTEM, NULL, error, 0, buf, PHP_WIN32_ERROR_MSG_BUFFER_SIZE, NULL);
+//		buf_len = (int)strlen(buf);
+//		if (buf_len >= 2) {
+//			buf[buf_len - 1] = '\0';
+//			buf[buf_len - 2] = '\0';
+//		}
+//		php_error_docref2(NULL, param1, param2, E_WARNING, "%s (code: %lu)", (char *)buf, error);
+//	}
+//}
+//#undef PHP_WIN32_ERROR_MSG_BUFFER_SIZE
+//#endif
 
 /* {{{ php_html_puts */
 PHPAPI void php_html_puts(const char *str, size_t size)
@@ -1934,15 +1934,15 @@ static size_t php_output_wrapper(const char *str, size_t str_length)
 }
 /* }}} */
 
-#ifdef ZTS
-/* {{{ core_globals_ctor
- */
-static void core_globals_ctor(php_core_globals *core_globals)
-{
-	memset(core_globals, 0, sizeof(*core_globals));
-}
-/* }}} */
-#endif
+//#ifdef ZTS
+///* {{{ core_globals_ctor
+// */
+//static void core_globals_ctor(php_core_globals *core_globals)
+//{
+//	memset(core_globals, 0, sizeof(*core_globals));
+//}
+///* }}} */
+//#endif
 
 /* {{{ core_globals_dtor
  */
@@ -2011,38 +2011,38 @@ static int php_register_extensions_bc(zend_module_entry *ptr, int count)
 }
 /* }}} */
 
-#ifdef PHP_WIN32
-static _invalid_parameter_handler old_invalid_parameter_handler;
-
-void dummy_invalid_parameter_handler(
-		const wchar_t *expression,
-		const wchar_t *function,
-		const wchar_t *file,
-		unsigned int   line,
-		uintptr_t      pEwserved)
-{
-	static int called = 0;
-	char buf[1024];
-	int len;
-
-	if (!called) {
-			if(PG(windows_show_crt_warning)) {
-			called = 1;
-			if (function) {
-				if (file) {
-					len = _snprintf(buf, sizeof(buf)-1, "Invalid parameter detected in CRT function '%ws' (%ws:%u)", function, file, line);
-				} else {
-					len = _snprintf(buf, sizeof(buf)-1, "Invalid parameter detected in CRT function '%ws'", function);
-				}
-			} else {
-				len = _snprintf(buf, sizeof(buf)-1, "Invalid CRT parameter detected (function not known)");
-			}
-			zend_error(E_WARNING, "%s", buf);
-			called = 0;
-		}
-	}
-}
-#endif
+//#ifdef PHP_WIN32
+//static _invalid_parameter_handler old_invalid_parameter_handler;
+//
+//void dummy_invalid_parameter_handler(
+//		const wchar_t *expression,
+//		const wchar_t *function,
+//		const wchar_t *file,
+//		unsigned int   line,
+//		uintptr_t      pEwserved)
+//{
+//	static int called = 0;
+//	char buf[1024];
+//	int len;
+//
+//	if (!called) {
+//			if(PG(windows_show_crt_warning)) {
+//			called = 1;
+//			if (function) {
+//				if (file) {
+//					len = _snprintf(buf, sizeof(buf)-1, "Invalid parameter detected in CRT function '%ws' (%ws:%u)", function, file, line);
+//				} else {
+//					len = _snprintf(buf, sizeof(buf)-1, "Invalid parameter detected in CRT function '%ws'", function);
+//				}
+//			} else {
+//				len = _snprintf(buf, sizeof(buf)-1, "Invalid CRT parameter detected (function not known)");
+//			}
+//			zend_error(E_WARNING, "%s", buf);
+//			called = 0;
+//		}
+//	}
+//}
+//#endif
 
 /* {{{ php_module_startup
  */
@@ -2054,32 +2054,32 @@ int php_module_startup(sapi_module_struct *sf, zend_module_entry *additional_mod
 	char *php_os;
 	zend_module_entry *module;
 
-#ifdef PHP_WIN32
-	WORD wVersionRequested = MAKEWORD(2, 0);
-	WSADATA wsaData;
-#endif
-#ifdef PHP_WIN32
-	php_os = "WINNT";
-
-	old_invalid_parameter_handler =
-		_set_invalid_parameter_handler(dummy_invalid_parameter_handler);
-	if (old_invalid_parameter_handler != NULL) {
-		_set_invalid_parameter_handler(old_invalid_parameter_handler);
-	}
-
-	/* Disable the message box for assertions.*/
-	_CrtSetReportMode(_CRT_ASSERT, 0);
-#else
+//#ifdef PHP_WIN32
+//	WORD wVersionRequested = MAKEWORD(2, 0);
+//	WSADATA wsaData;
+//#endif
+//#ifdef PHP_WIN32
+//	php_os = "WINNT";
+//
+//	old_invalid_parameter_handler =
+//		_set_invalid_parameter_handler(dummy_invalid_parameter_handler);
+//	if (old_invalid_parameter_handler != NULL) {
+//		_set_invalid_parameter_handler(old_invalid_parameter_handler);
+//	}
+//
+//	/* Disable the message box for assertions.*/
+//	_CrtSetReportMode(_CRT_ASSERT, 0);
+//#else
 	php_os = PHP_OS;
-#endif
+//#endif
 
-#ifdef ZTS
-	(void)ts_resource(0);
-#endif
+//#ifdef ZTS
+//	(void)ts_resource(0);
+//#endif
 
-#ifdef PHP_WIN32
-	php_win32_init_rng_lock();
-#endif
+//#ifdef PHP_WIN32
+//	php_win32_init_rng_lock();
+//#endif
 
 	module_shutdown = 0;
 	module_startup = 1;
@@ -2094,15 +2094,15 @@ int php_module_startup(sapi_module_struct *sf, zend_module_entry *additional_mod
 
 	php_output_startup();
 
-#ifdef ZTS
-	ts_allocate_id(&core_globals_id, sizeof(php_core_globals), (ts_allocate_ctor) core_globals_ctor, (ts_allocate_dtor) core_globals_dtor);
+//#ifdef ZTS
+//	ts_allocate_id(&core_globals_id, sizeof(php_core_globals), (ts_allocate_ctor) core_globals_ctor, (ts_allocate_dtor) core_globals_dtor);
+//	php_startup_ticks();
+//#ifdef PHP_WIN32
+//	ts_allocate_id(&php_win32_core_globals_id, sizeof(php_win32_core_globals), (ts_allocate_ctor) php_win32_core_globals_ctor, (ts_allocate_dtor) php_win32_core_globals_dtor);
+//#endif
+//#else
 	php_startup_ticks();
-#ifdef PHP_WIN32
-	ts_allocate_id(&php_win32_core_globals_id, sizeof(php_win32_core_globals), (ts_allocate_ctor) php_win32_core_globals_ctor, (ts_allocate_dtor) php_win32_core_globals_dtor);
-#endif
-#else
-	php_startup_ticks();
-#endif
+//#endif
 	gc_globals_ctor();
 
 	zuf.error_function = php_error_cb;
@@ -2129,13 +2129,13 @@ int php_module_startup(sapi_module_struct *sf, zend_module_entry *additional_mod
 	tzset();
 #endif
 
-#ifdef PHP_WIN32
-	/* start up winsock services */
-	if (WSAStartup(wVersionRequested, &wsaData) != 0) {
-		php_printf("\nwinsock.dll unusable. %d\n", WSAGetLastError());
-		return FAILURE;
-	}
-#endif
+//#ifdef PHP_WIN32
+//	/* start up winsock services */
+//	if (WSAStartup(wVersionRequested, &wsaData) != 0) {
+//		php_printf("\nwinsock.dll unusable. %d\n", WSAGetLastError());
+//		return FAILURE;
+//	}
+//#endif
 
 	le_index_ptr = zend_register_list_destructors_ex(NULL, NULL, "index pointer", 0);
 
@@ -2146,11 +2146,11 @@ int php_module_startup(sapi_module_struct *sf, zend_module_entry *additional_mod
 	REGISTER_MAIN_LONG_CONSTANT("PHP_RELEASE_VERSION", PHP_RELEASE_VERSION, CONST_PERSISTENT | CONST_CS);
 	REGISTER_MAIN_STRINGL_CONSTANT("PHP_EXTRA_VERSION", PHP_EXTRA_VERSION, sizeof(PHP_EXTRA_VERSION) - 1, CONST_PERSISTENT | CONST_CS);
 	REGISTER_MAIN_LONG_CONSTANT("PHP_VERSION_ID", PHP_VERSION_ID, CONST_PERSISTENT | CONST_CS);
-#ifdef ZTS
-	REGISTER_MAIN_LONG_CONSTANT("PHP_ZTS", 1, CONST_PERSISTENT | CONST_CS);
-#else
+//#ifdef ZTS
+//	REGISTER_MAIN_LONG_CONSTANT("PHP_ZTS", 1, CONST_PERSISTENT | CONST_CS);
+//#else
 	REGISTER_MAIN_LONG_CONSTANT("PHP_ZTS", 0, CONST_PERSISTENT | CONST_CS);
-#endif
+//#endif
 	REGISTER_MAIN_LONG_CONSTANT("PHP_DEBUG", PHP_DEBUG, CONST_PERSISTENT | CONST_CS);
 	REGISTER_MAIN_STRINGL_CONSTANT("PHP_OS", php_os, strlen(php_os), CONST_PERSISTENT | CONST_CS);
 	REGISTER_MAIN_STRINGL_CONSTANT("PHP_SAPI", sapi_module.name, strlen(sapi_module.name), CONST_PERSISTENT | CONST_CS);
@@ -2160,9 +2160,9 @@ int php_module_startup(sapi_module_struct *sf, zend_module_entry *additional_mod
 	REGISTER_MAIN_STRINGL_CONSTANT("PHP_EXTENSION_DIR", PHP_EXTENSION_DIR, sizeof(PHP_EXTENSION_DIR)-1, CONST_PERSISTENT | CONST_CS);
 	REGISTER_MAIN_STRINGL_CONSTANT("PHP_PREFIX", PHP_PREFIX, sizeof(PHP_PREFIX)-1, CONST_PERSISTENT | CONST_CS);
 	REGISTER_MAIN_STRINGL_CONSTANT("PHP_BINDIR", PHP_BINDIR, sizeof(PHP_BINDIR)-1, CONST_PERSISTENT | CONST_CS);
-#ifndef PHP_WIN32
-	REGISTER_MAIN_STRINGL_CONSTANT("PHP_MANDIR", PHP_MANDIR, sizeof(PHP_MANDIR)-1, CONST_PERSISTENT | CONST_CS);
-#endif
+//#ifndef PHP_WIN32
+//	REGISTER_MAIN_STRINGL_CONSTANT("PHP_MANDIR", PHP_MANDIR, sizeof(PHP_MANDIR)-1, CONST_PERSISTENT | CONST_CS);
+//#endif
 	REGISTER_MAIN_STRINGL_CONSTANT("PHP_LIBDIR", PHP_LIBDIR, sizeof(PHP_LIBDIR)-1, CONST_PERSISTENT | CONST_CS);
 	REGISTER_MAIN_STRINGL_CONSTANT("PHP_DATADIR", PHP_DATADIR, sizeof(PHP_DATADIR)-1, CONST_PERSISTENT | CONST_CS);
 	REGISTER_MAIN_STRINGL_CONSTANT("PHP_SYSCONFDIR", PHP_SYSCONFDIR, sizeof(PHP_SYSCONFDIR)-1, CONST_PERSISTENT | CONST_CS);
@@ -2181,19 +2181,19 @@ int php_module_startup(sapi_module_struct *sf, zend_module_entry *additional_mod
 	REGISTER_MAIN_DOUBLE_CONSTANT("PHP_FLOAT_MAX", DBL_MAX, CONST_PERSISTENT | CONST_CS);
 	REGISTER_MAIN_DOUBLE_CONSTANT("PHP_FLOAT_MIN", DBL_MIN, CONST_PERSISTENT | CONST_CS);
 
-#ifdef PHP_WIN32
-	REGISTER_MAIN_LONG_CONSTANT("PHP_WINDOWS_VERSION_MAJOR",      EG(windows_version_info).dwMajorVersion, CONST_PERSISTENT | CONST_CS);
-	REGISTER_MAIN_LONG_CONSTANT("PHP_WINDOWS_VERSION_MINOR",      EG(windows_version_info).dwMinorVersion, CONST_PERSISTENT | CONST_CS);
-	REGISTER_MAIN_LONG_CONSTANT("PHP_WINDOWS_VERSION_BUILD",      EG(windows_version_info).dwBuildNumber, CONST_PERSISTENT | CONST_CS);
-	REGISTER_MAIN_LONG_CONSTANT("PHP_WINDOWS_VERSION_PLATFORM",   EG(windows_version_info).dwPlatformId, CONST_PERSISTENT | CONST_CS);
-	REGISTER_MAIN_LONG_CONSTANT("PHP_WINDOWS_VERSION_SP_MAJOR",   EG(windows_version_info).wServicePackMajor, CONST_PERSISTENT | CONST_CS);
-	REGISTER_MAIN_LONG_CONSTANT("PHP_WINDOWS_VERSION_SP_MINOR",   EG(windows_version_info).wServicePackMinor, CONST_PERSISTENT | CONST_CS);
-	REGISTER_MAIN_LONG_CONSTANT("PHP_WINDOWS_VERSION_SUITEMASK",  EG(windows_version_info).wSuiteMask, CONST_PERSISTENT | CONST_CS);
-	REGISTER_MAIN_LONG_CONSTANT("PHP_WINDOWS_VERSION_PRODUCTTYPE", EG(windows_version_info).wProductType, CONST_PERSISTENT | CONST_CS);
-	REGISTER_MAIN_LONG_CONSTANT("PHP_WINDOWS_NT_DOMAIN_CONTROLLER", VER_NT_DOMAIN_CONTROLLER, CONST_PERSISTENT | CONST_CS);
-	REGISTER_MAIN_LONG_CONSTANT("PHP_WINDOWS_NT_SERVER", VER_NT_SERVER, CONST_PERSISTENT | CONST_CS);
-	REGISTER_MAIN_LONG_CONSTANT("PHP_WINDOWS_NT_WORKSTATION", VER_NT_WORKSTATION, CONST_PERSISTENT | CONST_CS);
-#endif
+//#ifdef PHP_WIN32
+//	REGISTER_MAIN_LONG_CONSTANT("PHP_WINDOWS_VERSION_MAJOR",      EG(windows_version_info).dwMajorVersion, CONST_PERSISTENT | CONST_CS);
+//	REGISTER_MAIN_LONG_CONSTANT("PHP_WINDOWS_VERSION_MINOR",      EG(windows_version_info).dwMinorVersion, CONST_PERSISTENT | CONST_CS);
+//	REGISTER_MAIN_LONG_CONSTANT("PHP_WINDOWS_VERSION_BUILD",      EG(windows_version_info).dwBuildNumber, CONST_PERSISTENT | CONST_CS);
+//	REGISTER_MAIN_LONG_CONSTANT("PHP_WINDOWS_VERSION_PLATFORM",   EG(windows_version_info).dwPlatformId, CONST_PERSISTENT | CONST_CS);
+//	REGISTER_MAIN_LONG_CONSTANT("PHP_WINDOWS_VERSION_SP_MAJOR",   EG(windows_version_info).wServicePackMajor, CONST_PERSISTENT | CONST_CS);
+//	REGISTER_MAIN_LONG_CONSTANT("PHP_WINDOWS_VERSION_SP_MINOR",   EG(windows_version_info).wServicePackMinor, CONST_PERSISTENT | CONST_CS);
+//	REGISTER_MAIN_LONG_CONSTANT("PHP_WINDOWS_VERSION_SUITEMASK",  EG(windows_version_info).wSuiteMask, CONST_PERSISTENT | CONST_CS);
+//	REGISTER_MAIN_LONG_CONSTANT("PHP_WINDOWS_VERSION_PRODUCTTYPE", EG(windows_version_info).wProductType, CONST_PERSISTENT | CONST_CS);
+//	REGISTER_MAIN_LONG_CONSTANT("PHP_WINDOWS_NT_DOMAIN_CONTROLLER", VER_NT_DOMAIN_CONTROLLER, CONST_PERSISTENT | CONST_CS);
+//	REGISTER_MAIN_LONG_CONSTANT("PHP_WINDOWS_NT_SERVER", VER_NT_SERVER, CONST_PERSISTENT | CONST_CS);
+//	REGISTER_MAIN_LONG_CONSTANT("PHP_WINDOWS_NT_WORKSTATION", VER_NT_WORKSTATION, CONST_PERSISTENT | CONST_CS);
+//#endif
 
 	php_binary_init();
 	if (PG(php_binary)) {

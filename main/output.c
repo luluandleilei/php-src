@@ -96,9 +96,9 @@ static size_t php_output_stderr(const char *str, size_t str_len)
 {
 	fwrite(str, 1, str_len, stderr);
 /* See http://support.microsoft.com/kb/190351 */
-#ifdef PHP_WIN32
-	fflush(stderr);
-#endif
+//#ifdef PHP_WIN32
+//	fflush(stderr);
+//#endif
 	return str_len;
 }
 static size_t (*php_output_direct)(const char *str, size_t str_len) = php_output_stderr;
@@ -160,11 +160,11 @@ PHPAPI void php_output_shutdown(void)
  * Reset output globals and setup the output handler stack */
 PHPAPI int php_output_activate(void)
 {
-#ifdef ZTS
-	memset((*((void ***) ZEND_TSRMLS_CACHE))[TSRM_UNSHUFFLE_RSRC_ID(output_globals_id)], 0, sizeof(zend_output_globals));
-#else
+//#ifdef ZTS
+//	memset((*((void ***) ZEND_TSRMLS_CACHE))[TSRM_UNSHUFFLE_RSRC_ID(output_globals_id)], 0, sizeof(zend_output_globals));
+//#else
 	memset(&output_globals, 0, sizeof(zend_output_globals));
-#endif
+//#endif
 
 	zend_stack_init(&OG(handlers), sizeof(php_output_handler *));
 	OG(flags) |= PHP_OUTPUT_ACTIVATED;

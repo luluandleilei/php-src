@@ -151,20 +151,20 @@ typedef struct _zend_fcall_info_cache {
 
 #ifdef ZTS
 
-#define ZEND_DECLARE_MODULE_GLOBALS(module_name)							\
-	ts_rsrc_id module_name##_globals_id;
-#define ZEND_EXTERN_MODULE_GLOBALS(module_name)								\
-	extern ts_rsrc_id module_name##_globals_id;
-#define ZEND_INIT_MODULE_GLOBALS(module_name, globals_ctor, globals_dtor)	\
-	ts_allocate_id(&module_name##_globals_id, sizeof(zend_##module_name##_globals), (ts_allocate_ctor) globals_ctor, (ts_allocate_dtor) globals_dtor);
-#define ZEND_MODULE_GLOBALS_ACCESSOR(module_name, v) ZEND_TSRMG(module_name##_globals_id, zend_##module_name##_globals *, v)
-#if ZEND_ENABLE_STATIC_TSRMLS_CACHE
-#define ZEND_MODULE_GLOBALS_BULK(module_name) TSRMG_BULK_STATIC(module_name##_globals_id, zend_##module_name##_globals *)
-#else
-#define ZEND_MODULE_GLOBALS_BULK(module_name) TSRMG_BULK(module_name##_globals_id, zend_##module_name##_globals *)
-#endif
+//#define ZEND_DECLARE_MODULE_GLOBALS(module_name)							\
+//	ts_rsrc_id module_name##_globals_id;
+//#define ZEND_EXTERN_MODULE_GLOBALS(module_name)								\
+//	extern ts_rsrc_id module_name##_globals_id;
+//#define ZEND_INIT_MODULE_GLOBALS(module_name, globals_ctor, globals_dtor)	\
+//	ts_allocate_id(&module_name##_globals_id, sizeof(zend_##module_name##_globals), (ts_allocate_ctor) globals_ctor, (ts_allocate_dtor) globals_dtor);
+//#define ZEND_MODULE_GLOBALS_ACCESSOR(module_name, v) ZEND_TSRMG(module_name##_globals_id, zend_##module_name##_globals *, v)
+//#if ZEND_ENABLE_STATIC_TSRMLS_CACHE
+//#define ZEND_MODULE_GLOBALS_BULK(module_name) TSRMG_BULK_STATIC(module_name##_globals_id, zend_##module_name##_globals *)
+//#else
+//#define ZEND_MODULE_GLOBALS_BULK(module_name) TSRMG_BULK(module_name##_globals_id, zend_##module_name##_globals *)
+//#endif
 
-#else
+//#else
 
 #define ZEND_DECLARE_MODULE_GLOBALS(module_name)							\
 	zend_##module_name##_globals module_name##_globals;
@@ -175,7 +175,7 @@ typedef struct _zend_fcall_info_cache {
 #define ZEND_MODULE_GLOBALS_ACCESSOR(module_name, v) (module_name##_globals.v)
 #define ZEND_MODULE_GLOBALS_BULK(module_name) (&module_name##_globals)
 
-#endif
+//#endif
 
 #define INIT_CLASS_ENTRY(class_container, class_name, functions) \
 	INIT_OVERLOADED_CLASS_ENTRY(class_container, class_name, functions, NULL, NULL, NULL)
