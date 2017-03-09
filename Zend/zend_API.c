@@ -813,6 +813,7 @@ static int zend_parse_va_args(int num_args, const char *type_spec, va_list *va, 
 	zval **varargs = NULL;
 	int *n_varargs = NULL;
 
+    //根据格式化字符串type_spec计算参数的最小个数和最大个数
 	for (spec_walk = type_spec; *spec_walk; spec_walk++) {
 		c = *spec_walk;
 		switch (c) {

@@ -357,7 +357,7 @@ static int really_register_bound_param(struct pdo_bound_param_data *param, pdo_s
 	}
 
 	if (param->name) {
-		if (is_param && ZSTR_VAL(param->name)[0] != ':') {
+		if (is_param && ZSTR_VAL(param->name)[0] != ':') {  //不是以':'开头添加':'
 			zend_string *temp = zend_string_alloc(ZSTR_LEN(param->name) + 1, 0);
 			ZSTR_VAL(temp)[0] = ':';
 			memmove(ZSTR_VAL(temp) + 1, ZSTR_VAL(param->name), ZSTR_LEN(param->name) + 1);
@@ -510,7 +510,7 @@ static PHP_METHOD(PDOStatement, execute)
 		PDO_HANDLE_STMT_ERR();
 		RETURN_FALSE;
 	}
-	if (stmt->methods->executer(stmt)) {
+	if (stmt->methods->executer(stmt)) {    //调用特定数据库驱动的statement对象的executer方法
 		if (!stmt->executed) {
 			/* this is the first execute */
 

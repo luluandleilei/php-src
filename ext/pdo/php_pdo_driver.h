@@ -348,10 +348,10 @@ typedef int (*pdo_stmt_get_col_data_func)(pdo_stmt_t *stmt, int colno, char **pt
 enum pdo_param_event {
 	PDO_PARAM_EVT_ALLOC,
 	PDO_PARAM_EVT_FREE,
-	PDO_PARAM_EVT_EXEC_PRE,
-	PDO_PARAM_EVT_EXEC_POST,
-	PDO_PARAM_EVT_FETCH_PRE,
-	PDO_PARAM_EVT_FETCH_POST,
+	PDO_PARAM_EVT_EXEC_PRE,     //在executer之前调用param_hook
+	PDO_PARAM_EVT_EXEC_POST,    //在executer之后调用param_hook
+	PDO_PARAM_EVT_FETCH_PRE,    //在fetcher之前调用param_hook
+	PDO_PARAM_EVT_FETCH_POST,   //在fetcher之后调用param_hook
 	PDO_PARAM_EVT_NORMALIZE
 };
 
@@ -633,7 +633,7 @@ struct _pdo_stmt_t {
 
 	/* used by the query parser for driver specific
 	 * parameter naming (see pgsql driver for example) */
-	const char *named_rewrite_template;
+	const char *named_rewrite_template; //用于将pdo参数格式转换到特定驱动的参数格式
 
 	/* these items must appear in this order at the beginning of the
        struct so that this can be cast as a zend_object.  we need this

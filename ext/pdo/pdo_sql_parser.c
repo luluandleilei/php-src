@@ -25,8 +25,8 @@
 #include "php_pdo_int.h"
 
 #define PDO_PARSER_TEXT 1
-#define PDO_PARSER_BIND 2
-#define PDO_PARSER_BIND_POS 3
+#define PDO_PARSER_BIND 2   //?找到一个':'字符
+#define PDO_PARSER_BIND_POS 3   //?找到一个'?'字符
 #define PDO_PARSER_EOI 4
 
 #define RET(i) {s->cur = cursor; return i; }
