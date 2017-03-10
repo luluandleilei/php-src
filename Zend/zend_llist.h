@@ -37,9 +37,9 @@ typedef void (*llist_apply_func_t)(void *);
 typedef struct _zend_llist {
 	zend_llist_element *head;
 	zend_llist_element *tail;
-	size_t count;
-	size_t size;
-	llist_dtor_func_t dtor;
+	size_t count;   //结点个数
+	size_t size;    //每个结点的数据的大小
+	llist_dtor_func_t dtor; //结点数据的释放函数
 	unsigned char persistent;
 	zend_llist_element *traverse_ptr;
 } zend_llist;
