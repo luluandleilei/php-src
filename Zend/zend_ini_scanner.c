@@ -106,11 +106,11 @@
 
 /* Globals Macros */
 #define SCNG	INI_SCNG
-#ifdef ZTS
-ZEND_API ts_rsrc_id ini_scanner_globals_id;
-#else
+//#ifdef ZTS
+//ZEND_API ts_rsrc_id ini_scanner_globals_id;
+//#else
 ZEND_API zend_ini_scanner_globals ini_scanner_globals;
-#endif
+//#endif
 
 #define ZEND_SYSTEM_INI CG(ini_parser_unbuffered_errors)
 

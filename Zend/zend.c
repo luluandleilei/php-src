@@ -34,17 +34,17 @@
 #include "zend_smart_str.h"
 #include "zend_smart_string.h"
 
-#ifdef ZTS
-# define GLOBAL_FUNCTION_TABLE		global_function_table
-# define GLOBAL_CLASS_TABLE			global_class_table
-# define GLOBAL_CONSTANTS_TABLE		global_constants_table
-# define GLOBAL_AUTO_GLOBALS_TABLE	global_auto_globals_table
-#else
+//#ifdef ZTS
+//# define GLOBAL_FUNCTION_TABLE		global_function_table
+//# define GLOBAL_CLASS_TABLE			global_class_table
+//# define GLOBAL_CONSTANTS_TABLE		global_constants_table
+//# define GLOBAL_AUTO_GLOBALS_TABLE	global_auto_globals_table
+//#else
 # define GLOBAL_FUNCTION_TABLE		CG(function_table)
 # define GLOBAL_CLASS_TABLE			CG(class_table)
 # define GLOBAL_AUTO_GLOBALS_TABLE	CG(auto_globals)
 # define GLOBAL_CONSTANTS_TABLE		EG(zend_constants)
-#endif
+//#endif
 
 /* true multithread-shared globals */
 ZEND_API zend_class_entry *zend_standard_class_def = NULL;
@@ -469,13 +469,13 @@ static FILE *zend_fopen_wrapper(const char *filename, zend_string **opened_path)
 }
 /* }}} */
 
-#ifdef ZTS
-static zend_bool short_tags_default      = 1;
-static uint32_t compiler_options_default = ZEND_COMPILE_DEFAULT;
-#else
+//#ifdef ZTS
+//static zend_bool short_tags_default      = 1;
+//static uint32_t compiler_options_default = ZEND_COMPILE_DEFAULT;
+//#else
 # define short_tags_default			1
 # define compiler_options_default	ZEND_COMPILE_DEFAULT
-#endif
+//#endif
 
 static void zend_set_default_compile_time_values(void) /* {{{ */
 {
@@ -719,25 +719,25 @@ static zend_bool php_auto_globals_create_globals(zend_string *name) /* {{{ */
 
 int zend_startup(zend_utility_functions *utility_functions, char **extensions) /* {{{ */
 {
-#ifdef ZTS
-	zend_compiler_globals *compiler_globals;
-	zend_executor_globals *executor_globals;
-	extern ZEND_API ts_rsrc_id ini_scanner_globals_id;
-	extern ZEND_API ts_rsrc_id language_scanner_globals_id;
-	ZEND_TSRMLS_CACHE_UPDATE();
-#else
+//#ifdef ZTS
+//	zend_compiler_globals *compiler_globals;
+//	zend_executor_globals *executor_globals;
+//	extern ZEND_API ts_rsrc_id ini_scanner_globals_id;
+//	extern ZEND_API ts_rsrc_id language_scanner_globals_id;
+//	ZEND_TSRMLS_CACHE_UPDATE();
+//#else
 	extern zend_ini_scanner_globals ini_scanner_globals;
 	extern zend_php_scanner_globals language_scanner_globals;
-#endif
+//#endif
 
 	start_memory_manager();
 
 	virtual_cwd_startup(); /* Could use shutdown to free the main cwd but it would just slow it down for CGI */
 
-#if defined(__FreeBSD__) || defined(__DragonFly__)
-	/* FreeBSD and DragonFly floating point precision fix */
-	fpsetmask(0);
-#endif
+//#if defined(__FreeBSD__) || defined(__DragonFly__)
+//	/* FreeBSD and DragonFly floating point precision fix */
+//	fpsetmask(0);
+//#endif
 
 	zend_startup_strtod();
 	zend_startup_extensions_mechanism();
@@ -807,33 +807,33 @@ int zend_startup(zend_utility_functions *utility_functions, char **extensions) /
 	zend_hash_init_ex(&module_registry, 32, NULL, module_destructor_zval, 1, 0);
 	zend_init_rsrc_list_dtors();
 
-#ifdef ZTS
-	ts_allocate_id(&compiler_globals_id, sizeof(zend_compiler_globals), (ts_allocate_ctor) compiler_globals_ctor, (ts_allocate_dtor) compiler_globals_dtor);
-	ts_allocate_id(&executor_globals_id, sizeof(zend_executor_globals), (ts_allocate_ctor) executor_globals_ctor, (ts_allocate_dtor) executor_globals_dtor);
-	ts_allocate_id(&language_scanner_globals_id, sizeof(zend_php_scanner_globals), (ts_allocate_ctor) php_scanner_globals_ctor, NULL);
-	ts_allocate_id(&ini_scanner_globals_id, sizeof(zend_ini_scanner_globals), (ts_allocate_ctor) ini_scanner_globals_ctor, NULL);
-	compiler_globals = ts_resource(compiler_globals_id);
-	executor_globals = ts_resource(executor_globals_id);
-
-	compiler_globals_dtor(compiler_globals);
-	compiler_globals->in_compilation = 0;
-	compiler_globals->function_table = (HashTable *) malloc(sizeof(HashTable));
-	compiler_globals->class_table = (HashTable *) malloc(sizeof(HashTable));
-
-	*compiler_globals->function_table = *GLOBAL_FUNCTION_TABLE;
-	*compiler_globals->class_table = *GLOBAL_CLASS_TABLE;
-	compiler_globals->auto_globals = GLOBAL_AUTO_GLOBALS_TABLE;
-
-	zend_hash_destroy(executor_globals->zend_constants);
-	*executor_globals->zend_constants = *GLOBAL_CONSTANTS_TABLE;
-#else
+//#ifdef ZTS
+//	ts_allocate_id(&compiler_globals_id, sizeof(zend_compiler_globals), (ts_allocate_ctor) compiler_globals_ctor, (ts_allocate_dtor) compiler_globals_dtor);
+//	ts_allocate_id(&executor_globals_id, sizeof(zend_executor_globals), (ts_allocate_ctor) executor_globals_ctor, (ts_allocate_dtor) executor_globals_dtor);
+//	ts_allocate_id(&language_scanner_globals_id, sizeof(zend_php_scanner_globals), (ts_allocate_ctor) php_scanner_globals_ctor, NULL);
+//	ts_allocate_id(&ini_scanner_globals_id, sizeof(zend_ini_scanner_globals), (ts_allocate_ctor) ini_scanner_globals_ctor, NULL);
+//	compiler_globals = ts_resource(compiler_globals_id);
+//	executor_globals = ts_resource(executor_globals_id);
+//
+//	compiler_globals_dtor(compiler_globals);
+//	compiler_globals->in_compilation = 0;
+//	compiler_globals->function_table = (HashTable *) malloc(sizeof(HashTable));
+//	compiler_globals->class_table = (HashTable *) malloc(sizeof(HashTable));
+//
+//	*compiler_globals->function_table = *GLOBAL_FUNCTION_TABLE;
+//	*compiler_globals->class_table = *GLOBAL_CLASS_TABLE;
+//	compiler_globals->auto_globals = GLOBAL_AUTO_GLOBALS_TABLE;
+//
+//	zend_hash_destroy(executor_globals->zend_constants);
+//	*executor_globals->zend_constants = *GLOBAL_CONSTANTS_TABLE;
+//#else
 	ini_scanner_globals_ctor(&ini_scanner_globals);
 	php_scanner_globals_ctor(&language_scanner_globals);
 	zend_set_default_compile_time_values();
-#ifdef ZEND_WIN32
-	zend_get_windows_version_info(&EG(windows_version_info));
-#endif
-#endif
+//#ifdef ZEND_WIN32
+//	zend_get_windows_version_info(&EG(windows_version_info));
+//#endif
+//#endif
 	EG(error_reporting) = E_ALL & ~E_NOTICE;
 
 	zend_interned_strings_init();

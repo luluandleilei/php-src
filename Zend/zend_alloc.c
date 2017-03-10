@@ -147,16 +147,16 @@ typedef uint32_t   zend_mm_page_info; /* 4-byte integer */
 typedef zend_ulong zend_mm_bitset;    /* 4-byte or 8-byte integer */
 
 #define ZEND_MM_ALIGNED_OFFSET(size, alignment) \
-	(((size_t)(size)) & ((alignment) - 1))
+	(((size_t)(size)) & ((alignment) - 1))  
 #define ZEND_MM_ALIGNED_BASE(size, alignment) \
 	(((size_t)(size)) & ~((alignment) - 1))
 #define ZEND_MM_SIZE_TO_NUM(size, alignment) \
 	(((size_t)(size) + ((alignment) - 1)) / (alignment))
 
-#define ZEND_MM_BITSET_LEN		(sizeof(zend_mm_bitset) * 8)       /* 32 or 64 */
-#define ZEND_MM_PAGE_MAP_LEN	(ZEND_MM_PAGES / ZEND_MM_BITSET_LEN) /* 16 or 8 */
+#define ZEND_MM_BITSET_LEN		(sizeof(zend_mm_bitset) * 8)       /* 32 or 64 */   //zend_mm_bitset所占用的位数
+#define ZEND_MM_PAGE_MAP_LEN	(ZEND_MM_PAGES / ZEND_MM_BITSET_LEN) /* 16 or 8 */  //总页数需要的zend_mm_bitset的个数
 
-typedef zend_mm_bitset zend_mm_page_map[ZEND_MM_PAGE_MAP_LEN];     /* 64B */
+typedef zend_mm_bitset zend_mm_page_map[ZEND_MM_PAGE_MAP_LEN];     /* 64B */    //页位图
 
 #define ZEND_MM_IS_FRUN                  0x00000000
 #define ZEND_MM_IS_LRUN                  0x40000000
@@ -285,8 +285,8 @@ struct _zend_mm_chunk {
 	uint32_t           num;
 	char               reserve[64 - (sizeof(void*) * 3 + sizeof(int) * 3)];
 	zend_mm_heap       heap_slot;               /* used only in main chunk */
-	zend_mm_page_map   free_map;                /* 512 bits or 64 bytes */
-	zend_mm_page_info  map[ZEND_MM_PAGES];      /* 2 KB = 512 * 4 */
+	zend_mm_page_map   free_map;                /* 512 bits or 64 bytes */  //记录每一个非配情况的位图
+	zend_mm_page_info  map[ZEND_MM_PAGES];      /* 2 KB = 512 * 4 */    //记录每一页的信息
 };
 
 struct _zend_mm_page {
@@ -445,17 +445,17 @@ static void *zend_mm_mmap_fixed(void *addr, size_t size)
 
 static void *zend_mm_mmap(size_t size)
 {
-#ifdef _WIN32
-	void *ptr = VirtualAlloc(NULL, size, MEM_COMMIT | MEM_RESERVE, PAGE_READWRITE);
-
-	if (ptr == NULL) {
-#if ZEND_MM_ERROR
-		stderr_last_error("VirtualAlloc() failed");
-#endif
-		return NULL;
-	}
-	return ptr;
-#else
+//#ifdef _WIN32
+//	void *ptr = VirtualAlloc(NULL, size, MEM_COMMIT | MEM_RESERVE, PAGE_READWRITE);
+//
+//	if (ptr == NULL) {
+//#if ZEND_MM_ERROR
+//		stderr_last_error("VirtualAlloc() failed");
+//#endif
+//		return NULL;
+//	}
+//	return ptr;
+//#else
 	void *ptr;
 
 #ifdef MAP_HUGETLB
@@ -476,24 +476,24 @@ static void *zend_mm_mmap(size_t size)
 		return NULL;
 	}
 	return ptr;
-#endif
+//#endif
 }
 
 static void zend_mm_munmap(void *addr, size_t size)
 {
-#ifdef _WIN32
-	if (VirtualFree(addr, 0, MEM_RELEASE) == 0) {
-#if ZEND_MM_ERROR
-		stderr_last_error("VirtualFree() failed");
-#endif
-	}
-#else
+//#ifdef _WIN32
+//	if (VirtualFree(addr, 0, MEM_RELEASE) == 0) {
+//#if ZEND_MM_ERROR
+//		stderr_last_error("VirtualFree() failed");
+//#endif
+//	}
+//#else
 	if (munmap(addr, size) != 0) {
 #if ZEND_MM_ERROR
 		fprintf(stderr, "\nmunmap() failed: [%d] %s\n", errno, strerror(errno));
 #endif
 	}
-#endif
+//#endif
 }
 
 /***********/
@@ -719,17 +719,17 @@ static void *zend_mm_chunk_alloc_int(size_t size, size_t alignment)
 		/* chunk has to be aligned */
 		zend_mm_munmap(ptr, size);
 		ptr = zend_mm_mmap(size + alignment - REAL_PAGE_SIZE);
-#ifdef _WIN32
-		offset = ZEND_MM_ALIGNED_OFFSET(ptr, alignment);
-		zend_mm_munmap(ptr, size + alignment - REAL_PAGE_SIZE);
-		ptr = zend_mm_mmap_fixed((void*)((char*)ptr + (alignment - offset)), size);
-		offset = ZEND_MM_ALIGNED_OFFSET(ptr, alignment);
-		if (offset != 0) {
-			zend_mm_munmap(ptr, size);
-			return NULL;
-		}
-		return ptr;
-#else
+//#ifdef _WIN32
+//		offset = ZEND_MM_ALIGNED_OFFSET(ptr, alignment);
+//		zend_mm_munmap(ptr, size + alignment - REAL_PAGE_SIZE);
+//		ptr = zend_mm_mmap_fixed((void*)((char*)ptr + (alignment - offset)), size);
+//		offset = ZEND_MM_ALIGNED_OFFSET(ptr, alignment);
+//		if (offset != 0) {
+//			zend_mm_munmap(ptr, size);
+//			return NULL;
+//		}
+//		return ptr;
+//#else
 		offset = ZEND_MM_ALIGNED_OFFSET(ptr, alignment);
 		if (offset != 0) {
 			offset = alignment - offset;
@@ -743,7 +743,7 @@ static void *zend_mm_chunk_alloc_int(size_t size, size_t alignment)
 # ifdef MADV_HUGEPAGE
 	    madvise(ptr, size, MADV_HUGEPAGE);
 # endif
-#endif
+//#endif
 		return ptr;
 	}
 }
@@ -1796,11 +1796,11 @@ static zend_mm_heap *zend_mm_init(void)
 
 	if (UNEXPECTED(chunk == NULL)) {
 #if ZEND_MM_ERROR
-#ifdef _WIN32
-		stderr_last_error("Can't initialize heap");
-#else
+//#ifdef _WIN32
+//		stderr_last_error("Can't initialize heap");
+//#else
 		fprintf(stderr, "\nCan't initialize heap: [%d] %s\n", errno, strerror(errno));
-#endif
+//#endif
 #endif
 		return NULL;
 	}
@@ -2282,13 +2282,13 @@ typedef struct _zend_alloc_globals {
 	zend_mm_heap *mm_heap;
 } zend_alloc_globals;
 
-#ifdef ZTS
-static int alloc_globals_id;
-# define AG(v) ZEND_TSRMG(alloc_globals_id, zend_alloc_globals *, v)
-#else
+//#ifdef ZTS
+//static int alloc_globals_id;
+//# define AG(v) ZEND_TSRMG(alloc_globals_id, zend_alloc_globals *, v)
+//#else
 # define AG(v) (alloc_globals.v)
 static zend_alloc_globals alloc_globals;
-#endif
+//#endif
 
 ZEND_API int is_zend_mm(void)
 {
@@ -2596,7 +2596,7 @@ static void alloc_globals_ctor(zend_alloc_globals *alloc_globals)
 #if ZEND_MM_CUSTOM
 	char *tmp = getenv("USE_ZEND_ALLOC");
 
-	if (tmp && !zend_atoi(tmp, 0)) {
+	if (tmp && !zend_atoi(tmp, 0)) {    //环境变量"USE_ZEND_ALLOC"为0，使用系统内存分配释放函数
 		alloc_globals->mm_heap = malloc(sizeof(zend_mm_heap));
 		memset(alloc_globals->mm_heap, 0, sizeof(zend_mm_heap));
 		alloc_globals->mm_heap->use_custom_heap = ZEND_MM_CUSTOM_HEAP_STD;
@@ -2625,11 +2625,11 @@ static void alloc_globals_dtor(zend_alloc_globals *alloc_globals)
 
 ZEND_API void start_memory_manager(void)
 {
-#ifdef ZTS
-	ts_allocate_id(&alloc_globals_id, sizeof(zend_alloc_globals), (ts_allocate_ctor) alloc_globals_ctor, (ts_allocate_dtor) alloc_globals_dtor);
-#else
+//#ifdef ZTS
+//	ts_allocate_id(&alloc_globals_id, sizeof(zend_alloc_globals), (ts_allocate_ctor) alloc_globals_ctor, (ts_allocate_dtor) alloc_globals_dtor);
+//#else
 	alloc_globals_ctor(&alloc_globals);
-#endif
+//#endif
 #ifndef _WIN32
 #  if defined(_SC_PAGESIZE)
 	REAL_PAGE_SIZE = sysconf(_SC_PAGESIZE);

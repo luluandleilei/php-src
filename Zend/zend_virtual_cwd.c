@@ -66,11 +66,11 @@
 MUTEX_T cwd_mutex;
 #endif
 
-#ifdef ZTS
-ts_rsrc_id cwd_globals_id;
-#else
+//#ifdef ZTS
+//ts_rsrc_id cwd_globals_id;
+//#else
 virtual_cwd_globals cwd_globals;
-#endif
+//#endif
 
 cwd_state main_cwd_state; /* True global */
 
@@ -397,9 +397,9 @@ CWD_API void virtual_cwd_startup(void) /* {{{ */
 	char *result;
 
 
-#ifdef ZEND_WIN32
-	ZeroMemory(&cwd, sizeof(cwd));
-#endif
+//#ifdef ZEND_WIN32
+//	ZeroMemory(&cwd, sizeof(cwd));
+//#endif
 	result = getcwd(cwd, sizeof(cwd));
 
 	if (!result) {
@@ -407,22 +407,22 @@ CWD_API void virtual_cwd_startup(void) /* {{{ */
 	}
 
 	main_cwd_state.cwd_length = (int)strlen(cwd);
-#ifdef ZEND_WIN32
-	if (main_cwd_state.cwd_length >= 2 && cwd[1] == ':') {
-		cwd[0] = toupper(cwd[0]);
-	}
-#endif
+//#ifdef ZEND_WIN32
+//	if (main_cwd_state.cwd_length >= 2 && cwd[1] == ':') {
+//		cwd[0] = toupper(cwd[0]);
+//	}
+//#endif
 	main_cwd_state.cwd = strdup(cwd);
 
-#ifdef ZTS
-	ts_allocate_id(&cwd_globals_id, sizeof(virtual_cwd_globals), (ts_allocate_ctor) cwd_globals_ctor, (ts_allocate_dtor) cwd_globals_dtor);
-#else
+//#ifdef ZTS
+//	ts_allocate_id(&cwd_globals_id, sizeof(virtual_cwd_globals), (ts_allocate_ctor) cwd_globals_ctor, (ts_allocate_dtor) cwd_globals_dtor);
+//#else
 	cwd_globals_ctor(&cwd_globals);
-#endif
+//#endif
 
-#if (defined(ZEND_WIN32)) && defined(ZTS)
-	cwd_mutex = tsrm_mutex_alloc();
-#endif
+//#if (defined(ZEND_WIN32)) && defined(ZTS)
+//	cwd_mutex = tsrm_mutex_alloc();
+//#endif
 }
 /* }}} */
 
