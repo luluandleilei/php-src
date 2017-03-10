@@ -191,6 +191,7 @@ static int zend_extension_startup(zend_extension *extension)
 }
 
 
+//初始化扩展管理链表zend_extensions
 int zend_startup_extensions_mechanism()
 {
 	/* Startup extensions mechanism */
@@ -200,6 +201,7 @@ int zend_startup_extensions_mechanism()
 }
 
 
+//调用所有注册到zend_extensions链表上的扩展的startup函数
 int zend_startup_extensions()
 {
 	zend_llist_apply_with_del(&zend_extensions, (int (*)(void *)) zend_extension_startup);
@@ -255,6 +257,7 @@ ZEND_API int zend_get_resource_handle(zend_extension *extension)
 }
 
 
+//获取对应名字的zend扩展结构
 ZEND_API zend_extension *zend_get_extension(const char *extension_name)
 {
 	zend_llist_element *element;

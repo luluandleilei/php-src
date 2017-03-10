@@ -547,7 +547,7 @@ static zend_always_inline zval *_zend_hash_add_or_update_i(HashTable *ht, zend_s
 	IS_CONSISTENT(ht);
 	HT_ASSERT(GC_REFCOUNT(ht) == 1);
 
-	if (UNEXPECTED(!(ht->u.flags & HASH_FLAG_INITIALIZED))) {
+	if (UNEXPECTED(!(ht->u.flags & HASH_FLAG_INITIALIZED))) {   //¹þÏ£±íÎ´³õÊ¼»¯
 		CHECK_INIT(ht, 0);
 		goto add_to_hash;
 	} else if (ht->u.flags & HASH_FLAG_PACKED) {

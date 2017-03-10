@@ -325,7 +325,7 @@ typedef struct _zend_internal_arg_info {
 	const char *class_name;
 	zend_uchar type_hint;
 	zend_uchar pass_by_reference;
-	zend_bool allow_null;
+	zend_bool allow_null;   //
 	zend_bool is_variadic;
 } zend_internal_arg_info;
 

@@ -34,10 +34,10 @@
 BEGIN_EXTERN_C()
 
 typedef struct _zend_function_entry {
-	const char *fname;
-	void (*handler)(INTERNAL_FUNCTION_PARAMETERS);
+	const char *fname;  //函数名
+	void (*handler)(INTERNAL_FUNCTION_PARAMETERS);  //函数指针
 	const struct _zend_internal_arg_info *arg_info;
-	uint32_t num_args;
+	uint32_t num_args;  //参数个数
 	uint32_t flags;
 } zend_function_entry;
 

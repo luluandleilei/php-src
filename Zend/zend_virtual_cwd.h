@@ -131,8 +131,8 @@ CWD_API int php_sys_readlink(const char *link, char *target, size_t target_len);
 #endif
 
 typedef struct _cwd_state {
-	char *cwd;
-	int cwd_length;
+	char *cwd;  //当前的工作目录(启动程序时的目录)
+	int cwd_length; //当前的工作目录长度
 } cwd_state;
 
 typedef int (*verify_path_func)(const cwd_state *);

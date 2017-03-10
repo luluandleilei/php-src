@@ -2596,7 +2596,7 @@ static void alloc_globals_ctor(zend_alloc_globals *alloc_globals)
 #if ZEND_MM_CUSTOM
 	char *tmp = getenv("USE_ZEND_ALLOC");
 
-	if (tmp && !zend_atoi(tmp, 0)) {
+	if (tmp && !zend_atoi(tmp, 0)) {    //环境变量"USE_ZEND_ALLOC"为0，使用系统内存分配释放函数
 		alloc_globals->mm_heap = malloc(sizeof(zend_mm_heap));
 		memset(alloc_globals->mm_heap, 0, sizeof(zend_mm_heap));
 		alloc_globals->mm_heap->use_custom_heap = ZEND_MM_CUSTOM_HEAP_STD;

@@ -400,7 +400,7 @@ CWD_API void virtual_cwd_startup(void) /* {{{ */
 #ifdef ZEND_WIN32
 	ZeroMemory(&cwd, sizeof(cwd));
 #endif
-	result = getcwd(cwd, sizeof(cwd));
+	result = getcwd(cwd, sizeof(cwd));  //获取当前工作目录
 
 	if (!result) {
 		cwd[0] = '\0';

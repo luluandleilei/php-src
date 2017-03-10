@@ -1994,7 +1994,7 @@ ZEND_API zend_module_entry* zend_register_module_ex(zend_module_entry *module) /
 	zend_printf("%s: Registering module %d\n", module->name, module->module_number);
 #endif
 
-	/* Check module dependencies */
+	/* Check module dependencies */ //检查模块的依赖关系
 	if (module->deps) {
 		const zend_module_dep *dep = module->deps;
 

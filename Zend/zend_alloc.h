@@ -265,7 +265,7 @@ ZEND_API zend_mm_heap *zend_mm_get_heap(void);
 ZEND_API size_t zend_mm_gc(zend_mm_heap *heap);
 
 #define ZEND_MM_CUSTOM_HEAP_NONE  0
-#define ZEND_MM_CUSTOM_HEAP_STD   1
+#define ZEND_MM_CUSTOM_HEAP_STD   1 //使用系统标准内存分配释放函数
 #define ZEND_MM_CUSTOM_HEAP_DEBUG 2
 
 ZEND_API int zend_mm_is_custom_heap(zend_mm_heap *new_heap);

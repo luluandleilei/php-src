@@ -144,7 +144,7 @@ struct _zval_struct {
 };
 
 typedef struct _zend_refcounted_h {
-	uint32_t         refcount;			/* reference counter 32-bit */
+	uint32_t         refcount;			/* reference counter 32-bit */  //引用计数
 	union {
 		struct {
 			ZEND_ENDIAN_LOHI_3(
@@ -214,7 +214,7 @@ struct _zend_array {
 
 #define HT_INVALID_IDX ((uint32_t) -1)
 
-#define HT_MIN_MASK ((uint32_t) -2)
+#define HT_MIN_MASK ((uint32_t) -2) //11111111111111111111111111111110
 #define HT_MIN_SIZE 8
 
 #if SIZEOF_SIZE_T == 4
@@ -404,9 +404,9 @@ static zend_always_inline zend_uchar zval_get_type(const zval* pz) {
 #define GC_OBJECT					(IS_OBJECT         | (GC_COLLECTABLE << GC_FLAGS_SHIFT))
 
 /* zval.u1.v.type_flags */
-#define IS_TYPE_CONSTANT			(1<<0)
-#define IS_TYPE_REFCOUNTED			(1<<2)
-#define IS_TYPE_COPYABLE			(1<<4)
+#define IS_TYPE_CONSTANT			(1<<0)  //标志位，表示该类型是常量类型
+#define IS_TYPE_REFCOUNTED			(1<<2)  //标志位，表示该类型需要引用计数
+#define IS_TYPE_COPYABLE			(1<<4)  //标志位，表示该类型可以被复制(对象和资源不可被复制)
 
 /* extended types */
 #define IS_INTERNED_STRING_EX		IS_STRING
@@ -431,22 +431,22 @@ static zend_always_inline zend_uchar zval_get_type(const zval* pz) {
 #define RESET_CONSTANT_VISITED(p)	Z_CONST_FLAGS_P(p) &= ~IS_CONSTANT_VISITED_MARK
 
 /* string flags (zval.value->gc.u.flags) */
-#define IS_STR_PERSISTENT			(1<<0) /* allocated using malloc   */
-#define IS_STR_INTERNED				(1<<1) /* interned string          */
-#define IS_STR_PERMANENT        	(1<<2) /* relives request boundary */
+#define IS_STR_PERSISTENT			(1<<0) /* allocated using malloc   */   //标志位，表示是malloc分配内存的字符串
+#define IS_STR_INTERNED				(1<<1) /* interned string          */   //标志位，表示INTERNED STRING
+#define IS_STR_PERMANENT        	(1<<2) /* relives request boundary */   //标志位，表示不可变的字符串， 用作哨兵作用
 
-#define IS_STR_CONSTANT             (1<<3) /* constant index */
-#define IS_STR_CONSTANT_UNQUALIFIED (1<<4) /* the same as IS_CONSTANT_UNQUALIFIED */
+#define IS_STR_CONSTANT             (1<<3) /* constant index */ //标志位，表示代表常量的字符串
+#define IS_STR_CONSTANT_UNQUALIFIED (1<<4) /* the same as IS_CONSTANT_UNQUALIFIED */    //标志位, 表示带有可能命名空间的常量字符串
 
 /* array flags */
-#define IS_ARRAY_IMMUTABLE			(1<<1)
+#define IS_ARRAY_IMMUTABLE			(1<<1)  //标志位，表示不可变数组(在opcache的共享内存中分配)
 
 /* object flags (zval.value->gc.u.flags) */
-#define IS_OBJ_APPLY_COUNT			0x07
-#define IS_OBJ_DESTRUCTOR_CALLED	(1<<3)
-#define IS_OBJ_FREE_CALLED			(1<<4)
-#define IS_OBJ_USE_GUARDS           (1<<5)
-#define IS_OBJ_HAS_GUARDS           (1<<6)
+#define IS_OBJ_APPLY_COUNT			0x07    //标志位，表示递归保护
+#define IS_OBJ_DESTRUCTOR_CALLED	(1<<3)  //标志位，表示析构函数已经调用
+#define IS_OBJ_FREE_CALLED			(1<<4)  //标志位，表示清理函数已经调用
+#define IS_OBJ_USE_GUARDS           (1<<5)  //标志位，表示魔术方法递归保护
+#define IS_OBJ_HAS_GUARDS           (1<<6)  //标志位，表示是否有魔术方法递归保护标志
 
 #define Z_OBJ_APPLY_COUNT(zval) \
 	(Z_GC_FLAGS(zval) & IS_OBJ_APPLY_COUNT)

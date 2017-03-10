@@ -595,7 +595,7 @@ static zend_always_inline void *zend_hash_add_mem(HashTable *ht, zend_string *ke
 {
 	zval tmp, *zv;
 
-	ZVAL_PTR(&tmp, NULL);
+	ZVAL_PTR(&tmp, NULL);   //设置tmp为一个NULL指针对象
 	if ((zv = zend_hash_add(ht, key, &tmp))) {
 		Z_PTR_P(zv) = pemalloc(size, ht->u.flags & HASH_FLAG_PERSISTENT);
 		memcpy(Z_PTR_P(zv), pData, size);
